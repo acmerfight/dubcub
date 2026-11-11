@@ -27,6 +27,7 @@
         "strict_required_status_checks_policy": true,
         "do_not_enforce_on_create": false,
         "required_status_checks": [
+          { "context": "CI required", "integration_id": 15368 },
           { "context": "Lint", "integration_id": 15368 },
           { "context": "Tests (iphone)", "integration_id": 15368 },
           { "context": "Tests (ipad)", "integration_id": 15368 }
