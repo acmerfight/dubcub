@@ -4,6 +4,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+  HOMEBREW_NO_AUTO_UPDATE: "1"
+
 permissions:
   contents: read
 
@@ -77,16 +81,16 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: Start simulator before installing tools and compiling
-        if: needs.scope.outputs.run_tests == 'true'
-        run: |
-          device_id=$(bash scripts/prepare-test-simulator.sh "${{ matrix.device }}")
-          echo "TEST_SIMULATOR_ID=$device_id" >> "$GITHUB_ENV"
       - name: Install development tools
         if: needs.scope.outputs.run_tests == 'true'
         run: |
           brew install xcodegen
           bash scripts/install-swiftlint.sh
+      - name: Start simulator before compiling
+        if: needs.scope.outputs.run_tests == 'true'
+        run: |
+          device_id=$(bash scripts/prepare-test-simulator.sh "${{ matrix.device }}")
+          echo "TEST_SIMULATOR_ID=$device_id" >> "$GITHUB_ENV"
       - name: Run core user scenarios
         if: needs.scope.outputs.run_tests == 'true'
         run: bash scripts/test-simulator.sh "${{ matrix.device }}"
