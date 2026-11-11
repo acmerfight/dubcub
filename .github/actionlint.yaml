@@ -1,0 +1,5 @@
+# Official hosted preview label, not yet built into actionlint 1.7.12.
+# https://docs.github.com/en/actions/reference/runners/github-hosted-runners
+self-hosted-runner:
+  labels:
+    - xcode-27

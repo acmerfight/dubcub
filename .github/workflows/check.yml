@@ -18,7 +18,7 @@ concurrency:
 jobs:
   required:
     name: CI required
-    needs: [lint, build, security]
+    needs: [lint, build, current-sdk, security]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -27,10 +27,12 @@ jobs:
         env:
           LINT_RESULT: ${{ needs.lint.result }}
           BUILD_RESULT: ${{ needs.build.result }}
+          CURRENT_SDK_RESULT: ${{ needs.current-sdk.result }}
           SECURITY_RESULT: ${{ needs.security.result }}
         run: |
           test "$LINT_RESULT" = success
           test "$BUILD_RESULT" = success
+          test "$CURRENT_SDK_RESULT" = success
           test "$SECURITY_RESULT" = success
 
   security:
@@ -86,4 +88,20 @@ jobs:
         run: |
           python3 scripts/tools.py install
       - name: Verify Debug tests and Release device compilation
+        run: bash scripts/verify-builds.sh
+
+  current-sdk:
+    name: Current SDK
+    runs-on: xcode-27
+    timeout-minutes: 15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_27.2.app/Contents/Developer
+      EXPECTED_XCODE_VERSION: "27.2"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install development tools
+        run: python3 scripts/tools.py install
+      - name: Verify current SDK Debug tests and Release device compilation
         run: bash scripts/verify-builds.sh

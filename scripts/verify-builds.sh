@@ -2,6 +2,9 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 source scripts/xcode-env.sh
+xcodebuild -version
+xcrun swift --version
+xcrun --sdk iphoneos --show-sdk-version
 python3 scripts/tools.py run xcodegen generate
 
 # Compile app and UI test targets without booting a simulator.

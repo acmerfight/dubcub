@@ -5,10 +5,10 @@
 ## 创建项目
 
 1. 在 GitHub 选择 **Use this template → Create a new repository**，只复制默认分支，再克隆自己的新仓库。GitHub 复制文件，不应假定分支保护、安全设置或历史 CI 结果也会继承。
-2. 安装完整 Xcode 26.3、iOS SDK 和兼容的模拟器运行时，满足完整开发环境检查。执行 `python3 scripts/tools.py install`，安装锁定版本、校验 SHA-256 的开发工具。
+2. 安装完整 Xcode 26.3（当前本地基线）、iOS SDK 和兼容的模拟器运行时，满足完整开发环境检查。执行 `python3 scripts/tools.py install`，安装锁定版本、校验 SHA-256 的开发工具。
 3. 在干净工作区执行 `python3 scripts/initialize-template.py --name MyApp --bundle-id com.example.myapp`。它更新工程名、源码路径、脚本、UI 测试和 Bundle ID，并重新生成工程；不会修改 Git 远程地址、提交历史或签名团队。检查差异，更新 README 的仓库链接、产品介绍和示例文案。
 4. 执行 `bash scripts/doctor.sh`、`bash scripts/check.sh` 和 `bash scripts/verify-builds.sh`。最后一项编译 Debug App / UI 测试和 Release 真机 SDK，不启动模拟器，也不签名。
-5. 将初始化结果通过分支与 PR 提交到新仓库，再运行 `python3 scripts/configure-repository.py OWNER/REPO` 应用保护设置。此命令需要 `gh` 登录及目标仓库管理员权限，可重复执行；会启用 PR 门禁、squash、自动合并能力、漏洞提醒和密钥推送保护。自动合并仍需逐 PR 启用。
+5. 将初始化结果通过分支与 PR 提交到新仓库，再运行 `python3 scripts/configure-repository.py OWNER/REPO` 应用保护设置。此命令需要 `gh` 登录及目标仓库管理员权限，可重复执行；会启用 PR 门禁、squash、自动合并能力、漏洞提醒、密钥推送保护、Action SHA 固定和只读工作流默认权限。自动合并仍需逐 PR 启用。
 6. 确认目标仓库 Actions 已启用，首次所有必需检查成功，定时 UI 工作流处于 active 状态。公开仓库可使用标准免费 runner；私有仓库的功能与额度取决于套餐，脚本会明确报告不支持的配置，不会默默跳过保护。
 
 `tools.lock.json` 是开发工具版本和发布包校验值的唯一来源。CI 与本地通过 `scripts/tools.py` 调用相同工具，不依赖 Homebrew 最新版本。升级需同时审查发布来源、版本和摘要，再验证生成工程及格式没有意外变化。
@@ -17,9 +17,9 @@
 
 ## 增加第一个业务切片
 
-先定义一个用户入口及可观察结果，再添加核心 BDD。纯业务规则和状态变化放在不依赖界面及设备 API 的模块中，在 Mac 上快速验证并加入每次 PR；真实存储、录音等行为只补必要集成验证。不要为模板预建空 Store、服务容器、持久化模型或“永远通过”的占位测试。
+先定义一个用户入口及可观察结果，再添加核心 BDD。新业务单元与集成测试优先使用 Swift Testing，界面自动化使用 XCTest。纯业务规则和状态变化放在不依赖界面及设备 API 的模块中，在 Mac 上快速验证并加入每次 PR；真实存储、录音等行为只补必要集成验证。不要为模板预建空 Store、服务容器、持久化模型或“永远通过”的占位测试。
 
-目前只有启动欢迎页的 UI 冒烟测试，每 6 小时运行，并支持手动执行。它不证明业务正确，也不替代发布候选版本的验收。新增测试目标需显式加入共享 scheme，新增快速测试需纳入 CI 汇总门禁。
+目前只有启动欢迎页及大字号横屏阅读两个核心 UI 场景，每 6 小时运行，并支持手动执行。它不证明业务正确，也不替代发布候选版本的验收。定时 UI 使用 Xcode 27.2，PR 同时编译本地基线及新 SDK；新 SDK runner 的预览状态及本机限制见 [工程审查记录](ENGINEERING.md)。新增测试目标需显式加入共享 scheme，新增快速测试需纳入 CI 汇总门禁。
 
 ## 发布前仍需完成
 
