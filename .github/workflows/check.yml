@@ -59,7 +59,7 @@ jobs:
   tests:
     name: Tests (${{ matrix.device }})
     needs: scope
-    if: always()
+    if: ${{ !cancelled() }}
     runs-on: ${{ needs.scope.outputs.run_tests == 'false' && 'ubuntu-latest' || 'macos-15' }}
     timeout-minutes: 20
     strategy:
