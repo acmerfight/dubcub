@@ -29,6 +29,7 @@
         "required_status_checks": [
           { "context": "CI required", "integration_id": 15368 },
           { "context": "Lint", "integration_id": 15368 },
+          { "context": "Security", "integration_id": 15368 },
           { "context": "Build", "integration_id": 15368 }
         ]
       }
