@@ -8,26 +8,31 @@ case "${1:-iphone}" in
     *) printf '用法：bash scripts/test-simulator.sh [iphone|ipad]\n' >&2; exit 2 ;;
 esac
 
-# Select an installed device instead of depending on one runner image's model name.
-device_id=$(xcrun simctl list devices available --json | /usr/bin/python3 -c '
-import json, sys
-family = "iPhone" if sys.argv[1] == "iphone" else "iPad"
-candidates = [(runtime, device) for runtime, devices in json.load(sys.stdin)["devices"].items()
-              if ".iOS-" in runtime for device in devices
-              if family in device["name"] and device.get("isAvailable")]
-if not candidates:
-    sys.exit("未找到可用的 " + family + " 模拟器，请安装 iOS 模拟器运行时。")
-candidates.sort(key=lambda item: tuple(map(int, item[0].split(".iOS-")[1].split("-"))), reverse=True)
-print(candidates[0][1]["udid"])
-' "$family")
+device_id=${TEST_SIMULATOR_ID:-$(bash scripts/prepare-test-simulator.sh "$family")}
+mkdir -p build/TestResults
+boot_log="$PWD/build/TestResults/$family-boot.log"
+xcrun simctl bootstatus "$device_id" -b > "$boot_log" 2>&1 &
+boot_pid=$!
+trap 'kill "$boot_pid" 2>/dev/null || true' EXIT
 
 xcodegen generate
-mkdir -p build/TestResults
 result_path="$PWD/build/TestResults/$family-$(date +%Y%m%d-%H%M%S).xcresult"
-xcodebuild -project DubCub.xcodeproj -scheme DubCub \
-    -configuration Debug -destination "platform=iOS Simulator,id=$device_id" \
-    -derivedDataPath build/DerivedData -resultBundlePath "$result_path" \
-    -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO test
+build_arguments=(
+    -project DubCub.xcodeproj -scheme DubCub -configuration Debug
+    -destination "platform=iOS Simulator,id=$device_id"
+    -derivedDataPath build/DerivedData -parallel-testing-enabled NO
+    CODE_SIGNING_ALLOWED=NO
+)
+started=$SECONDS
+xcodebuild "${build_arguments[@]}" build-for-testing
+printf 'TIMING build_seconds=%s\n' "$((SECONDS - started))"
+started=$SECONDS
+wait "$boot_pid"
+trap - EXIT
+printf 'TIMING remaining_boot_seconds=%s\n' "$((SECONDS - started))"
+started=$SECONDS
+xcodebuild "${build_arguments[@]}" -resultBundlePath "$result_path" test-without-building
+printf 'TIMING test_seconds=%s\n' "$((SECONDS - started))"
 
 # A successful build or an empty test plan must not count as passing tests.
 xcrun xcresulttool get test-results summary --path "$result_path" | \

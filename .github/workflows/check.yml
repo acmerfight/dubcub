@@ -1,9 +1,8 @@
 name: Project checks
 
 on:
-  push:
-    branches: [main]
   pull_request:
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -13,6 +12,27 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  scope:
+    name: Identify changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      run_tests: ${{ steps.scope.outputs.run_tests }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - id: scope
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "${{ github.event_name }}" = pull_request ]; then
+            python3 scripts/ci-scope.py "$BASE_SHA" >> "$GITHUB_OUTPUT"
+          else
+            echo "run_tests=true" >> "$GITHUB_OUTPUT"
+          fi
+
   lint:
     name: Lint
     runs-on: macos-15
@@ -34,27 +54,47 @@ jobs:
 
   tests:
     name: Tests (${{ matrix.device }})
-    runs-on: macos-15
+    needs: scope
+    if: always()
+    runs-on: ${{ needs.scope.outputs.run_tests == 'false' && 'ubuntu-latest' || 'macos-15' }}
     timeout-minutes: 20
     strategy:
       fail-fast: false
       matrix:
         device: [iphone, ipad]
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Require a valid scope decision
+        env:
+          SCOPE_RESULT: ${{ needs.scope.result }}
+          RUN_TESTS: ${{ needs.scope.outputs.run_tests }}
+        run: |
+          test "$SCOPE_RESULT" = success
+          case "$RUN_TESTS" in true|false) ;; *) exit 1 ;; esac
+      - name: Document-only change
+        if: needs.scope.outputs.run_tests == 'false'
+        run: echo "Only allowlisted prose changed; simulator execution is not applicable." >> "$GITHUB_STEP_SUMMARY"
+      - if: needs.scope.outputs.run_tests == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Start simulator before installing tools and compiling
+        if: needs.scope.outputs.run_tests == 'true'
+        run: |
+          device_id=$(bash scripts/prepare-test-simulator.sh "${{ matrix.device }}")
+          echo "TEST_SIMULATOR_ID=$device_id" >> "$GITHUB_ENV"
       - name: Install development tools
+        if: needs.scope.outputs.run_tests == 'true'
         run: |
           brew install xcodegen
           bash scripts/install-swiftlint.sh
       - name: Run core user scenarios
+        if: needs.scope.outputs.run_tests == 'true'
         run: bash scripts/test-simulator.sh "${{ matrix.device }}"
       - name: Upload test results
-        if: always()
+        if: always() && needs.scope.outputs.run_tests == 'true'
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: test-results-${{ matrix.device }}
-          path: build/TestResults/*.xcresult
+          path: build/TestResults/
           retention-days: 7
           if-no-files-found: warn
