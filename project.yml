@@ -7,6 +7,7 @@ settings:
   base:
     SWIFT_VERSION: "6.0"
     SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_TREAT_WARNINGS_AS_ERRORS: YES
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
     MARKETING_VERSION: "0.1.0"
@@ -43,8 +44,11 @@ targets:
         TARGETED_DEVICE_FAMILY: "1,2"
         ENABLE_USER_SCRIPT_SANDBOXING: NO
     preBuildScripts:
-      - name: Check rendering boundaries
-        script: bash "$SRCROOT/scripts/check-architecture.sh"
+      - name: Check lint and rendering boundaries
+        script: |
+          set -euo pipefail
+          bash "$SRCROOT/scripts/lint.sh"
+          bash "$SRCROOT/scripts/check-architecture.sh"
         basedOnDependencyAnalysis: false
 schemes:
   DubCub:

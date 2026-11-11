@@ -121,7 +121,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63BFDEEBC0AFF93BC1BE84ED /* Build configuration list for PBXNativeTarget "DubCubRendering" */;
 			buildPhases = (
-				D4F6D5D24E3376A6116CA0C3 /* Check rendering boundaries */,
+				74491618297185ABC00E76F8 /* Check lint and rendering boundaries */,
 				380EB0979298FFD24F9E328C /* Sources */,
 			);
 			buildRules = (
@@ -175,7 +175,7 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		D4F6D5D24E3376A6116CA0C3 /* Check rendering boundaries */ = {
+		74491618297185ABC00E76F8 /* Check lint and rendering boundaries */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -185,14 +185,14 @@
 			);
 			inputPaths = (
 			);
-			name = "Check rendering boundaries";
+			name = "Check lint and rendering boundaries";
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "bash \"$SRCROOT/scripts/check-architecture.sh\"";
+			shellScript = "set -euo pipefail\nbash \"$SRCROOT/scripts/lint.sh\"\nbash \"$SRCROOT/scripts/check-architecture.sh\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -306,6 +306,7 @@
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Release;
@@ -374,6 +375,7 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_STRICT_CONCURRENCY = complete;
+				SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;
 				SWIFT_VERSION = 6.0;
 			};
 			name = Debug;

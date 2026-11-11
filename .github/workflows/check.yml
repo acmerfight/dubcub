@@ -14,8 +14,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Install development tools
-        run: brew install xcodegen swiftformat
-      - name: Check architecture and formatting
+        run: |
+          brew install xcodegen swiftformat
+          bash scripts/install-swiftlint.sh
+      - name: Check code, architecture and formatting
         run: bash scripts/check.sh
       - name: Build for iPhone and iPad simulators
         run: bash scripts/build-simulator.sh

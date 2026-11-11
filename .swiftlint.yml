@@ -1,0 +1,58 @@
+# Keep the default rules and add focused correctness checks. Formatting belongs
+# to SwiftFormat; do not enable all opt-in rules or hide violations in a baseline.
+strict: true
+allow_zero_lintable_files: false
+check_for_updates: false
+
+# Scan the repository so future source and test directories are covered too.
+excluded:
+  - .build
+  - build
+  - DerivedData
+
+disabled_rules:
+  - opening_brace # SwiftFormat places braces after multiline conditions.
+  - trailing_comma # SwiftFormat owns trailing commas, including Swift 6 syntax.
+
+opt_in_rules:
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - unhandled_throwing_task
+  - unowned_variable_capture
+  - identical_operands
+  - no_empty_block
+  - fatal_error_message
+  - overridden_super_call
+  - prohibited_super_call
+  - weak_delegate
+  - empty_count
+  - empty_string
+  - contains_over_filter_count
+  - contains_over_filter_is_empty
+  - contains_over_first_not_nil
+  - first_where
+  - last_where
+  - redundant_nil_coalescing
+  - empty_xctest_method
+
+line_length:
+  warning: 110
+  ignores_comments: true
+  ignores_urls: true
+  ignores_interpolated_strings: true
+
+identifier_name:
+  min_length: 2
+  excluded: [x, y, z]
+
+function_body_length:
+  warning: 50
+type_body_length:
+  warning: 250
+file_length:
+  warning: 400
+cyclomatic_complexity:
+  warning: 10
+
+blanket_disable_command:
+  allowed_rules: []

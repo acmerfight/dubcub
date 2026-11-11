@@ -11,11 +11,13 @@ A playful iOS app that helps kids practice English by dubbing fun cartoons and v
 - 完整 Xcode 与 iOS 平台组件；运行模拟器还需安装与电脑兼容的 iOS 模拟器运行时。
 - Swift 6，最低部署版本 iOS / iPadOS 17。
 - XcodeGen 2.46.0 或以上；SwiftFormat 本地验证版本为 0.62.1。
+- SwiftLint 版本固定在 `.swiftlint-version`，本地与 CI 使用同一官方二进制。
 
 安装开发辅助工具：
 
 ```sh
 brew install xcodegen swiftformat
+bash scripts/install-swiftlint.sh
 bash scripts/doctor.sh
 ```
 
@@ -32,7 +34,16 @@ bash scripts/check.sh
 bash scripts/build-simulator.sh
 ```
 
-`check.sh` 验证架构检查器的正反样例、渲染边界和代码格式。渲染边界检查也接入 Xcode 构建，违规会使构建失败。GitHub Actions 对推送和拉取请求运行检查、模拟器编译及工程生成一致性检查。
+`check.sh` 执行严格代码 lint、架构检查器的正反样例、渲染边界和代码格式检查。GitHub Actions 对推送和拉取请求运行相同检查、模拟器编译及工程生成一致性检查。
+
+### 静态检查
+
+- `.swiftlint.yml` 保留默认规则，补充强制解包、隐式解包、未处理的抛错任务、空代码块等检查；所有警告都视为错误。扫描整个仓库，仅排除构建产物，新建源码和测试目录自动纳入。
+- SwiftFormat 统一格式；SwiftLint 中与之冲突的花括号位置、尾逗号规则关闭。运行 `swiftformat .` 修正格式，再运行 `bash scripts/check.sh`。
+- Xcode 构建执行相同的 lint 与渲染边界检查，Swift 编译器警告也会阻断构建。工具缺失、版本不符或检查失败时明确报错，不自动跳过，也不在构建时下载工具。
+- 不使用历史违规基线或全文件禁用掩盖问题。确有合理例外时，只对必要行豁免单条规则，并在旁边解释原因；规则变更必须审查。状态必要性、业务边界及纯函数语义仍需人工审查，lint 不能代替设计判断。
+
+安装脚本校验官方发布包的 SHA-256，工具放在被忽略的 `.build/tools/`。升级时同时更新 `.swiftlint-version` 和安装脚本中的校验值，重新安装并验证检查与编译。
 
 启动模拟器：
 

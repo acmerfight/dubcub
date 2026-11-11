@@ -11,6 +11,15 @@ for tool in git swift xcodegen swiftformat; do
         issues=$((issues + 1))
     fi
 done
+project_root=$(cd "$(dirname "$0")/.." && pwd)
+lint_version=$(cat "$project_root/.swiftlint-version")
+lint_binary="$project_root/.build/tools/swiftlint/$lint_version/swiftlint"
+if [ -x "$lint_binary" ] && [ "$("$lint_binary" version)" = "$lint_version" ]; then
+    printf '已安装：SwiftLint %s（项目固定版本）\n' "$lint_version"
+else
+    printf '缺少指定版本 SwiftLint：请运行 bash scripts/install-swiftlint.sh\n'
+    issues=$((issues + 1))
+fi
 if xcodebuild -version; then
     xcodebuild -showsdks
     if ! xcrun simctl list runtimes --json | /usr/bin/python3 -c 'import json,sys; items=json.load(sys.stdin)["runtimes"]; ready=[r for r in items if r.get("isAvailable") and r.get("identifier", "").startswith("com.apple.CoreSimulator.SimRuntime.iOS-")]; print("可用 iOS 模拟器运行时：", ", ".join(r["name"] for r in ready) or "无"); sys.exit(0 if ready else 1)'; then
