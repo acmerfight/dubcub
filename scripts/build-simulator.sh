@@ -1,0 +1,12 @@
+#!/bin/bash
+set -euo pipefail
+cd "$(dirname "$0")/.."
+source scripts/xcode-env.sh
+if ! xcrun --sdk iphonesimulator --show-sdk-path >/dev/null 2>&1; then
+    printf '请先安装完整 Xcode 和 iOS 平台组件，再运行此脚本。\n' >&2
+    exit 1
+fi
+xcodegen generate
+xcodebuild -project DubCub.xcodeproj -scheme DubCub \
+    -configuration Debug -destination 'generic/platform=iOS Simulator' \
+    -derivedDataPath build/DerivedData CODE_SIGNING_ALLOWED=NO build

@@ -1,0 +1,23 @@
+name: Project checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install development tools
+        run: brew install xcodegen swiftformat
+      - name: Check architecture and formatting
+        run: bash scripts/check.sh
+      - name: Build for iPhone and iPad simulators
+        run: bash scripts/build-simulator.sh
+      - name: Verify generated project is up to date
+        run: git diff --exit-code -- DubCub.xcodeproj
