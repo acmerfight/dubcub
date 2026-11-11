@@ -32,9 +32,21 @@ xcodegen generate
 open DubCub.xcodeproj
 bash scripts/check.sh
 bash scripts/build-simulator.sh
+bash scripts/test-simulator.sh iphone
+bash scripts/test-simulator.sh ipad
 ```
 
 `check.sh` 执行严格代码 lint、架构检查器的正反样例、渲染边界和代码格式检查。GitHub Actions 对推送和拉取请求运行相同检查、模拟器编译及工程生成一致性检查。
+
+### PR 与 CI
+
+所有改动从分支提交 PR，检查通过后 squash 合并。`main` 禁止直接推送、强制推送和删除；管理员没有绕过名单。合并要求分支与主分支同步、审查讨论全部解决，以及 GitHub Actions 的 `Lint`、`Tests (iphone)`、`Tests (ipad)` 全部通过。
+
+仓库当前只有一位协作者，暂不要求他人批准，避免作者无法审批自己的 PR；有独立审查者后再启用至少一位审批。规则定义保存在 `.github/main-ruleset.json`，GitHub 的实际规则需要通过仓库设置或 API 应用，修改文件本身不会自动生效。
+
+CI 分开执行静态检查与两个设备的核心用户测试；重复提交取消旧任务，保留测试结果 7 天。操作仅有读取仓库权限，外部 Action 固定到提交。CI 在 PR 合并候选版本上运行，不跳过文档改动。新增测试目标必须加入共享 scheme，测试脚本运行整个 scheme，零测试或跳过测试不能算成功。
+
+当前只有一个核心界面 BDD：已安装 App → 打开 → 看到欢迎信息。后续按 [AGENTS.md](AGENTS.md) 在最低可靠层补充核心业务行为，不为凑数量创建测试。
 
 ### 静态检查
 
