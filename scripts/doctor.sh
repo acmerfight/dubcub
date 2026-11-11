@@ -3,7 +3,7 @@ set -u
 source "$(dirname "$0")/xcode-env.sh"
 issues=0
 printf '系统：%s / %s\n' "$(sw_vers -productVersion)" "$(uname -m)"
-for tool in git swift xcodegen swiftformat; do
+for tool in git swift python3; do
     if command -v "$tool" >/dev/null 2>&1; then
         printf '已安装：%s\n' "$tool"
     else
@@ -12,12 +12,7 @@ for tool in git swift xcodegen swiftformat; do
     fi
 done
 project_root=$(cd "$(dirname "$0")/.." && pwd)
-lint_version=$(cat "$project_root/.swiftlint-version")
-lint_binary="$project_root/.build/tools/swiftlint/$lint_version/swiftlint"
-if [ -x "$lint_binary" ] && [ "$("$lint_binary" version)" = "$lint_version" ]; then
-    printf '已安装：SwiftLint %s（项目固定版本）\n' "$lint_version"
-else
-    printf '缺少指定版本 SwiftLint：请运行 bash scripts/install-swiftlint.sh\n'
+if ! python3 "$project_root/scripts/tools.py" check; then
     issues=$((issues + 1))
 fi
 if xcodebuild -version; then

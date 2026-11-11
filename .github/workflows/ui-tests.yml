@@ -31,8 +31,7 @@ jobs:
           persist-credentials: false
       - name: Install development tools
         run: |
-          brew install xcodegen
-          bash scripts/install-swiftlint.sh
+          python3 scripts/tools.py install
       - name: Start simulator before compiling
         run: |
           device_id=$(bash scripts/prepare-test-simulator.sh "${{ matrix.device }}")
