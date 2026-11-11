@@ -66,13 +66,12 @@ jobs:
           persist-credentials: false
       - name: Install development tools
         run: |
-          brew install xcodegen swiftformat
-          bash scripts/install-swiftlint.sh
+          python3 scripts/tools.py install
       - name: Check code, architecture and formatting
         run: bash scripts/check.sh
       - name: Verify generated project is up to date
         run: |
-          xcodegen generate
+          python3 scripts/tools.py run xcodegen generate
           git diff --exit-code -- DubCub.xcodeproj
 
   build:
@@ -85,7 +84,6 @@ jobs:
           persist-credentials: false
       - name: Install development tools
         run: |
-          brew install xcodegen
-          bash scripts/install-swiftlint.sh
-      - name: Compile for iPhone and iPad without booting a simulator
-        run: bash scripts/build-simulator.sh
+          python3 scripts/tools.py install
+      - name: Verify Debug tests and Release device compilation
+        run: bash scripts/verify-builds.sh

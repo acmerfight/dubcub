@@ -15,7 +15,7 @@ xcrun simctl bootstatus "$device_id" -b > "$boot_log" 2>&1 &
 boot_pid=$!
 trap 'kill "$boot_pid" 2>/dev/null || true' EXIT
 
-xcodegen generate
+python3 scripts/tools.py run xcodegen generate
 result_path="$PWD/build/TestResults/$family-$(date +%Y%m%d-%H%M%S).xcresult"
 build_arguments=(
     -project DubCub.xcodeproj -scheme DubCub -configuration Debug

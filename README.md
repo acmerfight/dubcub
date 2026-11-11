@@ -2,7 +2,7 @@
 
 A playful iOS app that helps kids practice English by dubbing fun cartoons and videos in their own voices.
 
-代码仓库：[acmerfight/dubcub](https://github.com/acmerfight/dubcub)。
+代码仓库：[acmerfight/dubcub](https://github.com/acmerfight/dubcub)。作为模板复用请先阅读 [TEMPLATE.md](TEMPLATE.md)，其中包含初始化命令、仓库保护设置和发布前责任。
 
 当前是支持 iPhone / iPad 的原生起始工程，只有静态欢迎页，尚未实现录音、配音、存储或导出。
 
@@ -10,14 +10,12 @@ A playful iOS app that helps kids practice English by dubbing fun cartoons and v
 
 - 完整 Xcode 与 iOS 平台组件；运行模拟器还需安装与电脑兼容的 iOS 模拟器运行时。
 - Swift 6，最低部署版本 iOS / iPadOS 17。
-- XcodeGen 2.46.0 或以上；SwiftFormat 本地验证版本为 0.62.1。
-- SwiftLint 版本固定在 `.swiftlint-version`，本地与 CI 使用同一官方二进制。
+- XcodeGen 2.46.0、SwiftFormat 0.62.1、SwiftLint 0.65.1，统一锁定在 `tools.lock.json`，本地与 CI 使用同一官方发布包。
 
 安装开发辅助工具：
 
 ```sh
-brew install xcodegen swiftformat
-bash scripts/install-swiftlint.sh
+python3 scripts/tools.py install
 bash scripts/doctor.sh
 ```
 
@@ -28,10 +26,10 @@ bash scripts/doctor.sh
 工程配置以 `project.yml` 为准，生成的 Xcode 工程一并提交，便于直接打开。
 
 ```sh
-xcodegen generate
+python3 scripts/tools.py run xcodegen generate
 open DubCub.xcodeproj
 bash scripts/check.sh
-bash scripts/build-simulator.sh
+bash scripts/verify-builds.sh
 bash scripts/test-simulator.sh iphone
 bash scripts/test-simulator.sh ipad
 ```
@@ -44,13 +42,13 @@ bash scripts/test-simulator.sh ipad
 
 仓库当前只有一位协作者，暂不要求他人批准，避免作者无法审批自己的 PR；有独立审查者后再启用至少一位审批。规则定义保存在 `.github/main-ruleset.json`，GitHub 的实际规则需要通过仓库设置或 API 应用，修改文件本身不会自动生效。
 
-PR 运行静态检查、工程一致性检查和 iPhone / iPad 编译，不启动模拟器；汇总检查要求前两项成功，失败、取消或跳过均不能合并。双设备 UI 测试已拆到 `Scheduled UI tests`，不再阻断每次 PR。
+PR 运行静态检查、工程一致性检查、Debug App / UI 测试代码编译及 Release 真机 SDK 编译，不启动模拟器；汇总检查要求静态、安全和编译检查均成功，失败、取消或跳过均不能合并。双设备 UI 测试已拆到 `Scheduled UI tests`，不再阻断每次 PR。
 
 UI 测试每 6 小时对主分支最新提交运行一次：UTC 00:17、06:17、12:17、18:17，即北京时间 02:17、08:17、14:17、20:17。避开整点以减少排队，GitHub 定时任务可能延迟，并非准点保证。也可在 Actions 中手动运行或使用 `gh workflow run ui-tests.yml --ref main`。失败需处理，发布前手动验证对应版本；代价是合并后才可能发现 UI 回归，正常调度下最长约 6 小时后开始检测。
 
 PR 新提交取消旧检查，定时或手动 UI 任务不相互中断，测试结果保留 7 天。操作仅有读取仓库权限，外部 Action 固定到提交。新增测试目标必须加入共享 scheme，UI 测试脚本仍拒绝零测试或跳过测试。当前没有业务状态测试；后续新增状态层核心 BDD 时纳入每次代码 PR 的快速检查。
 
-CI 使用官方镜像预装的 Xcode 26.3，与本地基线一致；不在每次运行时自动更新 Homebrew。工具安装后启动模拟器，启动等待与 `build-for-testing` 重叠；启动和编译均成功后，使用同一产物执行 `test-without-building`。日志分别记录编译、剩余启动等待、测试耗时，便于用实际数据判断优化效果。没有使用缓存测试结果、自动重试或减少设备覆盖来提速。
+CI 使用官方镜像预装的 Xcode 26.3，与本地基线一致；工具版本来自锁定文件。定时 UI 任务在工具安装后启动模拟器，启动等待与 `build-for-testing` 重叠；启动和编译均成功后，使用同一产物执行 `test-without-building`。日志分别记录编译、剩余启动等待、测试耗时，便于用实际数据判断优化效果。没有使用缓存测试结果、自动重试或减少设备覆盖来提速。
 
 当前只有一个核心界面 BDD：已安装 App → 打开 → 看到欢迎信息。后续按 [AGENTS.md](AGENTS.md) 在最低可靠层补充核心业务行为，不为凑数量创建测试。
 
@@ -69,11 +67,11 @@ CI 使用官方镜像预装的 Xcode 26.3，与本地基线一致；不在每次
 ### 静态检查
 
 - `.swiftlint.yml` 保留默认规则，补充强制解包、隐式解包、未处理的抛错任务、空代码块等检查；所有警告都视为错误。扫描整个仓库，仅排除构建产物，新建源码和测试目录自动纳入。
-- SwiftFormat 统一格式；SwiftLint 中与之冲突的花括号位置、尾逗号规则关闭。运行 `swiftformat .` 修正格式，再运行 `bash scripts/check.sh`。
+- SwiftFormat 统一格式；SwiftLint 中与之冲突的花括号位置、尾逗号规则关闭。运行 `python3 scripts/tools.py run swiftformat .` 修正格式，再运行 `bash scripts/check.sh`。
 - Xcode 构建执行相同的 lint 与渲染边界检查，Swift 编译器警告也会阻断构建。工具缺失、版本不符或检查失败时明确报错，不自动跳过，也不在构建时下载工具。
 - 不使用历史违规基线或全文件禁用掩盖问题。确有合理例外时，只对必要行豁免单条规则，并在旁边解释原因；规则变更必须审查。状态必要性、业务边界及纯函数语义仍需人工审查，lint 不能代替设计判断。
 
-安装脚本校验官方发布包的 SHA-256，工具放在被忽略的 `.build/tools/`。升级时同时更新 `.swiftlint-version` 和安装脚本中的校验值，重新安装并验证检查与编译。
+安装脚本校验官方发布包的 SHA-256，工具放在被忽略的 `.build/tools/`。升级时更新 `tools.lock.json`，重新安装并验证检查与编译。
 
 ### 安全检查
 

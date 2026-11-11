@@ -4,4 +4,4 @@ cd "$(dirname "$0")/.."
 bash scripts/lint.sh
 bash scripts/check-architecture.sh --self-test
 bash scripts/check-architecture.sh
-swiftformat . --lint
+python3 scripts/tools.py run swiftformat . --lint
