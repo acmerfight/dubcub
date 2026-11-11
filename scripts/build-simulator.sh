@@ -7,6 +7,6 @@ if ! xcrun --sdk iphonesimulator --show-sdk-path >/dev/null 2>&1; then
     exit 1
 fi
 python3 scripts/tools.py run xcodegen generate
-xcodebuild -project DubCub.xcodeproj -scheme DubCub \
+xcodebuild -project SwiftSeed.xcodeproj -scheme SwiftSeed \
     -configuration Debug -destination 'generic/platform=iOS Simulator' \
     -derivedDataPath build/DerivedData CODE_SIGNING_ALLOWED=NO build

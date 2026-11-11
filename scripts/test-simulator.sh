@@ -18,7 +18,7 @@ trap 'kill "$boot_pid" 2>/dev/null || true' EXIT
 python3 scripts/tools.py run xcodegen generate
 result_path="$PWD/build/TestResults/$family-$(date +%Y%m%d-%H%M%S).xcresult"
 build_arguments=(
-    -project DubCub.xcodeproj -scheme DubCub -configuration Debug
+    -project SwiftSeed.xcodeproj -scheme SwiftSeed -configuration Debug
     -destination "platform=iOS Simulator,id=$device_id"
     -derivedDataPath build/DerivedData -parallel-testing-enabled NO
     CODE_SIGNING_ALLOWED=NO

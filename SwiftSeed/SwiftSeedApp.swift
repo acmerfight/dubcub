@@ -1,8 +1,8 @@
-import DubCubRendering
+import SwiftSeedRendering
 import SwiftUI
 
 @main
-struct DubCubApp: App {
+struct SwiftSeedApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(state: .initial)

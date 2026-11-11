@@ -12,7 +12,7 @@ if [ ! -d "$host_libraries/SwiftParser.swiftmodule" ]; then
 fi
 # Build phases inherit the iOS SDK/architecture. The checker runs on the Mac.
 if [ "$#" -eq 0 ]; then
-    set -- DubCub/Rendering
+    set -- SwiftSeed/Rendering
 fi
 xcrun --sdk macosx swift -swift-version 6 \
     -target "$(uname -m)-apple-macosx13.0" \

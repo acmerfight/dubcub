@@ -15,10 +15,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0BB66961D11B303FE61AA1B2"
-               BuildableName = "DubCub.app"
-               BlueprintName = "DubCub"
-               ReferencedContainer = "container:DubCub.xcodeproj">
+               BlueprintIdentifier = "21F16FB542502235B2E794DD"
+               BuildableName = "SwiftSeed.app"
+               BlueprintName = "SwiftSeed"
+               ReferencedContainer = "container:SwiftSeed.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0BB66961D11B303FE61AA1B2"
-            BuildableName = "DubCub.app"
-            BlueprintName = "DubCub"
-            ReferencedContainer = "container:DubCub.xcodeproj">
+            BlueprintIdentifier = "21F16FB542502235B2E794DD"
+            BuildableName = "SwiftSeed.app"
+            BlueprintName = "SwiftSeed"
+            ReferencedContainer = "container:SwiftSeed.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -44,10 +44,10 @@
             parallelizable = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "EB1040DA6A6235D46E86CFDE"
-               BuildableName = "DubCubUITests.xctest"
-               BlueprintName = "DubCubUITests"
-               ReferencedContainer = "container:DubCub.xcodeproj">
+               BlueprintIdentifier = "56C4324725FC0BF744737AA0"
+               BuildableName = "SwiftSeedUITests.xctest"
+               BlueprintName = "SwiftSeedUITests"
+               ReferencedContainer = "container:SwiftSeed.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -68,10 +68,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0BB66961D11B303FE61AA1B2"
-            BuildableName = "DubCub.app"
-            BlueprintName = "DubCub"
-            ReferencedContainer = "container:DubCub.xcodeproj">
+            BlueprintIdentifier = "21F16FB542502235B2E794DD"
+            BuildableName = "SwiftSeed.app"
+            BlueprintName = "SwiftSeed"
+            ReferencedContainer = "container:SwiftSeed.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
@@ -87,10 +87,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "0BB66961D11B303FE61AA1B2"
-            BuildableName = "DubCub.app"
-            BlueprintName = "DubCub"
-            ReferencedContainer = "container:DubCub.xcodeproj">
+            BlueprintIdentifier = "21F16FB542502235B2E794DD"
+            BuildableName = "SwiftSeed.app"
+            BlueprintName = "SwiftSeed"
+            ReferencedContainer = "container:SwiftSeed.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

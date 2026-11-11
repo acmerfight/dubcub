@@ -7,39 +7,39 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		044F279A4E79D311268740AC /* DubCubRendering.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CEB5F4BC08A28237B85DBA0 /* DubCubRendering.framework */; };
-		10BFF24154E23B3AB950A1F6 /* WelcomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36F30EED205BB86063E05519 /* WelcomeTests.swift */; };
-		1BCEDEAE7BC2D531513857AF /* DubCubApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6346398D642D6D010D3E302 /* DubCubApp.swift */; };
-		A0F73C747F095E89316C3C42 /* DubCubRendering.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 9CEB5F4BC08A28237B85DBA0 /* DubCubRendering.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		C0479E0C566B85BB16B2283C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DC89CD5E7E3CD0018AA5B79 /* ContentView.swift */; };
-		C0866545BB36AF9EFD546E56 /* HomeViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FBBF744D0CCDBDD85C8A729 /* HomeViewState.swift */; };
+		09CEB9BE8368A570D3380A70 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49B8293DFDF06186F104F2B8 /* ContentView.swift */; };
+		248DBCDC0B4372CC7C862A7B /* SwiftSeedRendering.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 740491A61843559554849296 /* SwiftSeedRendering.framework */; };
+		25DAC3E6A46B1F4B7906BF87 /* WelcomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D434927646641C91E1E193 /* WelcomeTests.swift */; };
+		9A25E6F6E1021C30F578B5BC /* HomeViewState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70F7D1DC4C717B9ABF077AD8 /* HomeViewState.swift */; };
+		A1C2167763906AD608F8F7AB /* SwiftSeedRendering.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 740491A61843559554849296 /* SwiftSeedRendering.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		E74E5A75FEF0EF35795E9168 /* SwiftSeedApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28C468ED32143191CF0AA8D2 /* SwiftSeedApp.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		3A3942A77C9BB5B3563F4820 /* PBXContainerItemProxy */ = {
+		0678C9225682ED6EC2843D81 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D35C76FBAD2E6A263D2DB014 /* Project object */;
+			containerPortal = 59FD934AD72739D1D78B5623 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = E17AA5C3BB2F9112304B2790;
-			remoteInfo = DubCubRendering;
+			remoteGlobalIDString = 8C20631EEC6BD7BC7760F5F2;
+			remoteInfo = SwiftSeedRendering;
 		};
-		68015B7E8ADBF40D6F4C0D83 /* PBXContainerItemProxy */ = {
+		30BA1B90CD19767C0F3A5048 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = D35C76FBAD2E6A263D2DB014 /* Project object */;
+			containerPortal = 59FD934AD72739D1D78B5623 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 0BB66961D11B303FE61AA1B2;
-			remoteInfo = DubCub;
+			remoteGlobalIDString = 21F16FB542502235B2E794DD;
+			remoteInfo = SwiftSeed;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		55057AE3500073FB54482C79 /* Embed Frameworks */ = {
+		10E44507A56F405C9A16656C /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A0F73C747F095E89316C3C42 /* DubCubRendering.framework in Embed Frameworks */,
+				A1C2167763906AD608F8F7AB /* SwiftSeedRendering.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -47,179 +47,179 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		2FBBF744D0CCDBDD85C8A729 /* HomeViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewState.swift; sourceTree = "<group>"; };
-		36F30EED205BB86063E05519 /* WelcomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeTests.swift; sourceTree = "<group>"; };
-		4E3703DE5AB44166840B181C /* DubCubUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = DubCubUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8DC89CD5E7E3CD0018AA5B79 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		9CEB5F4BC08A28237B85DBA0 /* DubCubRendering.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DubCubRendering.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B6346398D642D6D010D3E302 /* DubCubApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DubCubApp.swift; sourceTree = "<group>"; };
-		CBA304E1911E2F2EBDD62CD5 /* DubCub.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = DubCub.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		28C468ED32143191CF0AA8D2 /* SwiftSeedApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftSeedApp.swift; sourceTree = "<group>"; };
+		49B8293DFDF06186F104F2B8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		70F7D1DC4C717B9ABF077AD8 /* HomeViewState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewState.swift; sourceTree = "<group>"; };
+		740491A61843559554849296 /* SwiftSeedRendering.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftSeedRendering.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE18BE1F9D74404751D913A8 /* SwiftSeed.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SwiftSeed.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E06EA98AE752F5D78A5DE5F5 /* SwiftSeedUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = SwiftSeedUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E3D434927646641C91E1E193 /* WelcomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		E6DF03BFBFE33D517393F49B /* Frameworks */ = {
+		07E029A929663FD2E8DACFDB /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				044F279A4E79D311268740AC /* DubCubRendering.framework in Frameworks */,
+				248DBCDC0B4372CC7C862A7B /* SwiftSeedRendering.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1B146D34EFFE7EBCFE6B4958 = {
+		103513E8EB9AF3F2CC4E220C /* SwiftSeed */ = {
 			isa = PBXGroup;
 			children = (
-				AF13D2812E320E2617E1411E /* DubCub */,
-				FDF6DBBAD8E6D6942D256C92 /* DubCubUITests */,
-				4C231962FEE7C0743676197A /* Rendering */,
-				A5EDBD36F217088C744E49E5 /* Products */,
+				28C468ED32143191CF0AA8D2 /* SwiftSeedApp.swift */,
+			);
+			path = SwiftSeed;
+			sourceTree = "<group>";
+		};
+		36730A67A98AC7EA5D05003E = {
+			isa = PBXGroup;
+			children = (
+				A23AAAACB1694879380AF392 /* Rendering */,
+				103513E8EB9AF3F2CC4E220C /* SwiftSeed */,
+				FA05AC14C906317C3568C7AF /* SwiftSeedUITests */,
+				87631EC207BCE9826A0122D7 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		4C231962FEE7C0743676197A /* Rendering */ = {
+		87631EC207BCE9826A0122D7 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8DC89CD5E7E3CD0018AA5B79 /* ContentView.swift */,
-				2FBBF744D0CCDBDD85C8A729 /* HomeViewState.swift */,
-			);
-			name = Rendering;
-			path = DubCub/Rendering;
-			sourceTree = "<group>";
-		};
-		A5EDBD36F217088C744E49E5 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				CBA304E1911E2F2EBDD62CD5 /* DubCub.app */,
-				9CEB5F4BC08A28237B85DBA0 /* DubCubRendering.framework */,
-				4E3703DE5AB44166840B181C /* DubCubUITests.xctest */,
+				AE18BE1F9D74404751D913A8 /* SwiftSeed.app */,
+				740491A61843559554849296 /* SwiftSeedRendering.framework */,
+				E06EA98AE752F5D78A5DE5F5 /* SwiftSeedUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AF13D2812E320E2617E1411E /* DubCub */ = {
+		A23AAAACB1694879380AF392 /* Rendering */ = {
 			isa = PBXGroup;
 			children = (
-				B6346398D642D6D010D3E302 /* DubCubApp.swift */,
+				49B8293DFDF06186F104F2B8 /* ContentView.swift */,
+				70F7D1DC4C717B9ABF077AD8 /* HomeViewState.swift */,
 			);
-			path = DubCub;
+			name = Rendering;
+			path = SwiftSeed/Rendering;
 			sourceTree = "<group>";
 		};
-		FDF6DBBAD8E6D6942D256C92 /* DubCubUITests */ = {
+		FA05AC14C906317C3568C7AF /* SwiftSeedUITests */ = {
 			isa = PBXGroup;
 			children = (
-				36F30EED205BB86063E05519 /* WelcomeTests.swift */,
+				E3D434927646641C91E1E193 /* WelcomeTests.swift */,
 			);
-			path = DubCubUITests;
+			path = SwiftSeedUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		0BB66961D11B303FE61AA1B2 /* DubCub */ = {
+		21F16FB542502235B2E794DD /* SwiftSeed */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C45331311645675F9B216624 /* Build configuration list for PBXNativeTarget "DubCub" */;
+			buildConfigurationList = CF54D6D19C2B6305D3C322B5 /* Build configuration list for PBXNativeTarget "SwiftSeed" */;
 			buildPhases = (
-				65A6F03A52A38E11BB4416DE /* Sources */,
-				E6DF03BFBFE33D517393F49B /* Frameworks */,
-				55057AE3500073FB54482C79 /* Embed Frameworks */,
+				BE136C4E40CD1B9962C9612F /* Sources */,
+				07E029A929663FD2E8DACFDB /* Frameworks */,
+				10E44507A56F405C9A16656C /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D0197772D774CEC39201522C /* PBXTargetDependency */,
+				647C8105EDBD38BE216ED593 /* PBXTargetDependency */,
 			);
-			name = DubCub;
+			name = SwiftSeed;
 			packageProductDependencies = (
 			);
-			productName = DubCub;
-			productReference = CBA304E1911E2F2EBDD62CD5 /* DubCub.app */;
+			productName = SwiftSeed;
+			productReference = AE18BE1F9D74404751D913A8 /* SwiftSeed.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E17AA5C3BB2F9112304B2790 /* DubCubRendering */ = {
+		56C4324725FC0BF744737AA0 /* SwiftSeedUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 63BFDEEBC0AFF93BC1BE84ED /* Build configuration list for PBXNativeTarget "DubCubRendering" */;
+			buildConfigurationList = 670FC54D2568E2819CF12485 /* Build configuration list for PBXNativeTarget "SwiftSeedUITests" */;
 			buildPhases = (
-				74491618297185ABC00E76F8 /* Check lint and rendering boundaries */,
-				380EB0979298FFD24F9E328C /* Sources */,
+				6CC5E9B372D5645688AB3F3B /* Sources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				291839BA0E05F424911D65CD /* PBXTargetDependency */,
 			);
-			name = DubCubRendering;
+			name = SwiftSeedUITests;
 			packageProductDependencies = (
 			);
-			productName = DubCubRendering;
-			productReference = 9CEB5F4BC08A28237B85DBA0 /* DubCubRendering.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		EB1040DA6A6235D46E86CFDE /* DubCubUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 9511E590DEC28BEDEE5C140C /* Build configuration list for PBXNativeTarget "DubCubUITests" */;
-			buildPhases = (
-				65E56AB04A30BDE3A79A637C /* Sources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				5DF07226FB521FE2867E18CC /* PBXTargetDependency */,
-			);
-			name = DubCubUITests;
-			packageProductDependencies = (
-			);
-			productName = DubCubUITests;
-			productReference = 4E3703DE5AB44166840B181C /* DubCubUITests.xctest */;
+			productName = SwiftSeedUITests;
+			productReference = E06EA98AE752F5D78A5DE5F5 /* SwiftSeedUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		8C20631EEC6BD7BC7760F5F2 /* SwiftSeedRendering */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D17C9AEB736B7AD71AAB4293 /* Build configuration list for PBXNativeTarget "SwiftSeedRendering" */;
+			buildPhases = (
+				67089D281401CCC4D8F3F974 /* Check lint and rendering boundaries */,
+				AADA54F44C8A5CE787C022BA /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwiftSeedRendering;
+			packageProductDependencies = (
+			);
+			productName = SwiftSeedRendering;
+			productReference = 740491A61843559554849296 /* SwiftSeedRendering.framework */;
+			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		D35C76FBAD2E6A263D2DB014 /* Project object */ = {
+		59FD934AD72739D1D78B5623 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
-					0BB66961D11B303FE61AA1B2 = {
+					21F16FB542502235B2E794DD = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
-					E17AA5C3BB2F9112304B2790 = {
+					56C4324725FC0BF744737AA0 = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
+						TestTargetID = 21F16FB542502235B2E794DD;
 					};
-					EB1040DA6A6235D46E86CFDE = {
+					8C20631EEC6BD7BC7760F5F2 = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
-						TestTargetID = 0BB66961D11B303FE61AA1B2;
 					};
 				};
 			};
-			buildConfigurationList = 0A977E04B595C70BBCB320BD /* Build configuration list for PBXProject "DubCub" */;
+			buildConfigurationList = CA48897AD662CB8A3E61D7B4 /* Build configuration list for PBXProject "SwiftSeed" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				en,
 			);
-			mainGroup = 1B146D34EFFE7EBCFE6B4958;
+			mainGroup = 36730A67A98AC7EA5D05003E;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = A5EDBD36F217088C744E49E5 /* Products */;
+			productRefGroup = 87631EC207BCE9826A0122D7 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				0BB66961D11B303FE61AA1B2 /* DubCub */,
-				EB1040DA6A6235D46E86CFDE /* DubCubUITests */,
-				E17AA5C3BB2F9112304B2790 /* DubCubRendering */,
+				21F16FB542502235B2E794DD /* SwiftSeed */,
+				56C4324725FC0BF744737AA0 /* SwiftSeedUITests */,
+				8C20631EEC6BD7BC7760F5F2 /* SwiftSeedRendering */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		74491618297185ABC00E76F8 /* Check lint and rendering boundaries */ = {
+		67089D281401CCC4D8F3F974 /* Check lint and rendering boundaries */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -241,48 +241,48 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		380EB0979298FFD24F9E328C /* Sources */ = {
+		6CC5E9B372D5645688AB3F3B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C0479E0C566B85BB16B2283C /* ContentView.swift in Sources */,
-				C0866545BB36AF9EFD546E56 /* HomeViewState.swift in Sources */,
+				25DAC3E6A46B1F4B7906BF87 /* WelcomeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		65A6F03A52A38E11BB4416DE /* Sources */ = {
+		AADA54F44C8A5CE787C022BA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1BCEDEAE7BC2D531513857AF /* DubCubApp.swift in Sources */,
+				09CEB9BE8368A570D3380A70 /* ContentView.swift in Sources */,
+				9A25E6F6E1021C30F578B5BC /* HomeViewState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		65E56AB04A30BDE3A79A637C /* Sources */ = {
+		BE136C4E40CD1B9962C9612F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				10BFF24154E23B3AB950A1F6 /* WelcomeTests.swift in Sources */,
+				E74E5A75FEF0EF35795E9168 /* SwiftSeedApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		5DF07226FB521FE2867E18CC /* PBXTargetDependency */ = {
+		291839BA0E05F424911D65CD /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 0BB66961D11B303FE61AA1B2 /* DubCub */;
-			targetProxy = 68015B7E8ADBF40D6F4C0D83 /* PBXContainerItemProxy */;
+			target = 21F16FB542502235B2E794DD /* SwiftSeed */;
+			targetProxy = 30BA1B90CD19767C0F3A5048 /* PBXContainerItemProxy */;
 		};
-		D0197772D774CEC39201522C /* PBXTargetDependency */ = {
+		647C8105EDBD38BE216ED593 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E17AA5C3BB2F9112304B2790 /* DubCubRendering */;
-			targetProxy = 3A3942A77C9BB5B3563F4820 /* PBXContainerItemProxy */;
+			target = 8C20631EEC6BD7BC7760F5F2 /* SwiftSeedRendering */;
+			targetProxy = 0678C9225682ED6EC2843D81 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		398C55222B3A17DF178C139F /* Release */ = {
+		3829D10473BCA066C533D0FE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
@@ -298,15 +298,15 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.dubcub.rendering;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.swiftseed.rendering;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
-			name = Release;
+			name = Debug;
 		};
-		3A01DCE9A5DFBDAE50D865F4 /* Release */ = {
+		5389539B7AEEB915E50D76D2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -370,24 +370,31 @@
 			};
 			name = Release;
 		};
-		3A96C82257EE3594215192E0 /* Release */ = {
+		53E147DD359D6EEBC1F6DBF4 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.dubcub.uitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.swiftseed.rendering;
 				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = DubCub;
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
-		3F3E6EDD0FFDBE8B4454969C /* Debug */ = {
+		8FD2863F69F20717FAC09C54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -458,75 +465,7 @@
 			};
 			name = Debug;
 		};
-		446200E6BAC75598F7F0332F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = DubCub;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.dubcub;
-				SDKROOT = iphoneos;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		5E7F64E3B90E133B6792487E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_IDENTITY = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GENERATE_INFOPLIST_FILE = YES;
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.dubcub.rendering;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-			};
-			name = Debug;
-		};
-		B148C1F71B9CC07D67F3D1DC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = DubCub;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.dubcub;
-				SDKROOT = iphoneos;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		CBD6B9E6B2919138B3395F69 /* Debug */ = {
+		9A2C3C703ADCA2FF304E93F4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -536,53 +475,114 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.dubcub.uitests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.swiftseed.uitests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = DubCub;
+				TEST_TARGET_NAME = SwiftSeed;
 			};
 			name = Debug;
+		};
+		BAE2CEAA4055C973991B3C25 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = SwiftSeed;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.swiftseed;
+				SDKROOT = iphoneos;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D4F4286F8ACE9762392ADA00 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = SwiftSeed;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.swiftseed;
+				SDKROOT = iphoneos;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EA85657724F5F6EFEFF52C08 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.acmerfight.swiftseed.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = SwiftSeed;
+			};
+			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		0A977E04B595C70BBCB320BD /* Build configuration list for PBXProject "DubCub" */ = {
+		670FC54D2568E2819CF12485 /* Build configuration list for PBXNativeTarget "SwiftSeedUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				3F3E6EDD0FFDBE8B4454969C /* Debug */,
-				3A01DCE9A5DFBDAE50D865F4 /* Release */,
+				9A2C3C703ADCA2FF304E93F4 /* Debug */,
+				EA85657724F5F6EFEFF52C08 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		63BFDEEBC0AFF93BC1BE84ED /* Build configuration list for PBXNativeTarget "DubCubRendering" */ = {
+		CA48897AD662CB8A3E61D7B4 /* Build configuration list for PBXProject "SwiftSeed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5E7F64E3B90E133B6792487E /* Debug */,
-				398C55222B3A17DF178C139F /* Release */,
+				8FD2863F69F20717FAC09C54 /* Debug */,
+				5389539B7AEEB915E50D76D2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		9511E590DEC28BEDEE5C140C /* Build configuration list for PBXNativeTarget "DubCubUITests" */ = {
+		CF54D6D19C2B6305D3C322B5 /* Build configuration list for PBXNativeTarget "SwiftSeed" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CBD6B9E6B2919138B3395F69 /* Debug */,
-				3A96C82257EE3594215192E0 /* Release */,
+				BAE2CEAA4055C973991B3C25 /* Debug */,
+				D4F4286F8ACE9762392ADA00 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		C45331311645675F9B216624 /* Build configuration list for PBXNativeTarget "DubCub" */ = {
+		D17C9AEB736B7AD71AAB4293 /* Build configuration list for PBXNativeTarget "SwiftSeedRendering" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B148C1F71B9CC07D67F3D1DC /* Debug */,
-				446200E6BAC75598F7F0332F /* Release */,
+				3829D10473BCA066C533D0FE /* Debug */,
+				53E147DD359D6EEBC1F6DBF4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = D35C76FBAD2E6A263D2DB014 /* Project object */;
+	rootObject = 59FD934AD72739D1D78B5623 /* Project object */;
 }
