@@ -1,6 +1,6 @@
 #!/bin/bash
 set -u
-source "$(dirname "$0")/xcode-env.sh"
+source "$(dirname "$0")/xcode-env.sh" || exit 1
 issues=0
 printf '系统：%s / %s\n' "$(sw_vers -productVersion)" "$(uname -m)"
 for tool in git swift python3; do

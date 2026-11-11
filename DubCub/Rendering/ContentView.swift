@@ -8,6 +8,17 @@ public struct ContentView: View {
     }
 
     public var body: some View {
+        GeometryReader { viewport in
+            ScrollView {
+                welcome
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: viewport.size.height)
+            }
+            .scrollBounceBehavior(.basedOnSize)
+        }
+    }
+
+    private var welcome: some View {
         VStack(spacing: 20) {
             Image(systemName: "waveform.circle.fill")
                 .font(.system(size: 80))
@@ -21,12 +32,18 @@ public struct ContentView: View {
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
         }
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
         .padding(32)
         .frame(maxWidth: 560)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 #Preview {
     ContentView(state: .initial)
+}
+
+#Preview("窄窗口与最大字号", traits: .fixedLayout(width: 320, height: 320)) {
+    ContentView(state: .initial)
+        .dynamicTypeSize(.accessibility5)
 }

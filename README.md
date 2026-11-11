@@ -2,13 +2,13 @@
 
 A playful iOS app that helps kids practice English by dubbing fun cartoons and videos in their own voices.
 
-代码仓库：[acmerfight/dubcub](https://github.com/acmerfight/dubcub)。作为模板复用请先阅读 [TEMPLATE.md](TEMPLATE.md)，其中包含初始化命令、仓库保护设置和发布前责任。
+代码仓库：[acmerfight/dubcub](https://github.com/acmerfight/dubcub)。作为模板复用请先阅读 [TEMPLATE.md](TEMPLATE.md)，其中包含初始化命令、仓库保护设置和发布前责任。设计取舍、官方依据和验证边界见 [工程审查记录](ENGINEERING.md)。
 
 当前是支持 iPhone / iPad 的原生起始工程，只有静态欢迎页，尚未实现录音、配音、存储或导出。
 
 ## 开发环境
 
-- 完整 Xcode 与 iOS 平台组件；运行模拟器还需安装与电脑兼容的 iOS 模拟器运行时。
+- 本地基线 Xcode 26.3（`.xcode-version`），以及 iOS 平台组件；运行模拟器还需安装与电脑兼容的 iOS 模拟器运行时。
 - Swift 6，最低部署版本 iOS / iPadOS 17。
 - XcodeGen 2.46.0、SwiftFormat 0.62.1、SwiftLint 0.65.1，统一锁定在 `tools.lock.json`，本地与 CI 使用同一官方发布包。
 
@@ -19,7 +19,7 @@ python3 scripts/tools.py install
 bash scripts/doctor.sh
 ```
 
-脚本在未指定 `DEVELOPER_DIR` 时优先使用 `/Applications/Xcode.app`，不会修改全局开发工具设置。
+脚本在未指定 `DEVELOPER_DIR` 时优先使用 `/Applications/Xcode.app`，不会修改全局开发工具设置，并校验版本。已安装较新 Xcode 时，可显式指定 `DEVELOPER_DIR` 和 `EXPECTED_XCODE_VERSION=27.2` 运行同一检查；该版本必须经过实际验证。
 
 ## 开发与验证
 
@@ -42,15 +42,15 @@ bash scripts/test-simulator.sh ipad
 
 仓库当前只有一位协作者，暂不要求他人批准，避免作者无法审批自己的 PR；有独立审查者后再启用至少一位审批。规则定义保存在 `.github/main-ruleset.json`，GitHub 的实际规则需要通过仓库设置或 API 应用，修改文件本身不会自动生效。
 
-PR 运行静态检查、工程一致性检查、Debug App / UI 测试代码编译及 Release 真机 SDK 编译，不启动模拟器；汇总检查要求静态、安全和编译检查均成功，失败、取消或跳过均不能合并。双设备 UI 测试已拆到 `Scheduled UI tests`，不再阻断每次 PR。
+PR 运行静态检查、工程一致性检查，并分别以 Xcode 26.3 和 27.2 编译 Debug App / UI 测试代码及 Release 真机 SDK，不启动模拟器；`Current SDK` 纳入 `CI required`，汇总检查要求静态、安全和两套编译检查均成功，失败、取消或跳过均不能合并。双设备 UI 测试已拆到 `Scheduled UI tests`，不再阻断每次 PR。
 
 UI 测试每 6 小时对主分支最新提交运行一次：UTC 00:17、06:17、12:17、18:17，即北京时间 02:17、08:17、14:17、20:17。避开整点以减少排队，GitHub 定时任务可能延迟，并非准点保证。也可在 Actions 中手动运行或使用 `gh workflow run ui-tests.yml --ref main`。失败需处理，发布前手动验证对应版本；代价是合并后才可能发现 UI 回归，正常调度下最长约 6 小时后开始检测。
 
 PR 新提交取消旧检查，定时或手动 UI 任务不相互中断，测试结果保留 7 天。操作仅有读取仓库权限，外部 Action 固定到提交。新增测试目标必须加入共享 scheme，UI 测试脚本仍拒绝零测试或跳过测试。当前没有业务状态测试；后续新增状态层核心 BDD 时纳入每次代码 PR 的快速检查。
 
-CI 使用官方镜像预装的 Xcode 26.3，与本地基线一致；工具版本来自锁定文件。定时 UI 任务在工具安装后启动模拟器，启动等待与 `build-for-testing` 重叠；启动和编译均成功后，使用同一产物执行 `test-without-building`。日志分别记录编译、剩余启动等待、测试耗时，便于用实际数据判断优化效果。没有使用缓存测试结果、自动重试或减少设备覆盖来提速。
+CI 的基线检查使用 Xcode 26.3，与本地一致；`Current SDK` 和双设备定时 UI 使用固定的 Xcode 27.2。后者使用 GitHub `xcode-27` 预览 runner，环境可用性风险见工程审查记录，失败不会自动跳过。辅助工具版本来自锁定文件。定时 UI 任务在工具安装后启动模拟器，启动等待与 `build-for-testing` 重叠；启动和编译均成功后，使用同一产物执行 `test-without-building`。日志分别记录编译、剩余启动等待、测试耗时，便于用实际数据判断优化效果。没有使用缓存测试结果、自动重试或减少设备覆盖来提速。
 
-当前只有一个核心界面 BDD：已安装 App → 打开 → 看到欢迎信息。后续按 [AGENTS.md](AGENTS.md) 在最低可靠层补充核心业务行为，不为凑数量创建测试。
+当前只有两个核心界面 BDD：已安装 App → 打开 → 看到欢迎信息；最大辅助字号、横屏 → 打开并向下阅读 → 文字不裁切且说明可达。后者包含系统无障碍审计，覆盖实际发现的阅读问题。后续按 [AGENTS.md](AGENTS.md) 在最低可靠层补充核心业务行为，不为凑数量创建测试。
 
 #### 历史 CI 耗时实测（2026-11-11，UI 仍阻断 PR 时）
 
@@ -71,13 +71,15 @@ CI 使用官方镜像预装的 Xcode 26.3，与本地基线一致；工具版本
 - Xcode 构建执行相同的 lint 与渲染边界检查，Swift 编译器警告也会阻断构建。工具缺失、版本不符或检查失败时明确报错，不自动跳过，也不在构建时下载工具。
 - 不使用历史违规基线或全文件禁用掩盖问题。确有合理例外时，只对必要行豁免单条规则，并在旁边解释原因；规则变更必须审查。状态必要性、业务边界及纯函数语义仍需人工审查，lint 不能代替设计判断。
 
+应用组合目标默认在主 actor 上隔离；渲染模块保持非隔离默认值，不将纯展示数据绑到界面线程。Swift 6 严格检查与 Approachable Concurrency 一起启用，异步不等于后台执行。
+
 安装脚本校验官方发布包的 SHA-256，工具放在被忽略的 `.build/tools/`。升级时更新 `tools.lock.json`，重新安装并验证检查与编译。
 
 ### 安全检查
 
 每次 PR 的 `Security` 检查在 Linux 上并行执行，并纳入必需检查及最终汇总门禁：Gitleaks 扫描完整 Git 历史中的密钥并脱敏输出；zizmor 审计工作流的权限、注入及供应链风险，发现问题直接失败；Dependency Review 阻止新增存在已知漏洞的依赖（包括低危及以上），不将扫描结果仅当作提示。
 
-GitHub Secret Scanning 和 Push Protection 保持开启；Dependabot 每周为 Actions 更新创建 PR，漏洞提醒与安全更新保持开启。更新 PR 同样经过合并门禁；启用仓库的 auto-merge 能力并不意味着所有未来 PR 自动合并，需要逐个明确启用。
+仓库要求 Action 固定完整 SHA，默认只读权限且不允许工作流批准 PR。GitHub Secret Scanning 和 Push Protection 保持开启；Dependabot 每周为 Actions 更新创建 PR，漏洞提醒与安全更新保持开启。更新 PR 同样经过合并门禁；启用仓库的 auto-merge 能力并不意味着所有未来 PR 自动合并，需要逐个明确启用。
 
 当前没有第三方业务依赖，依赖检查主要覆盖 GitHub 能识别的清单和 Actions；手动下载的工具通过固定版本和 SHA-256 校验管理，升级需审查。上述检查不代替应用业务安全审查。安全工具版本或校验值变更也必须通过 PR。
 

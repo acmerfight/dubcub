@@ -37,6 +37,12 @@ def main():
         "allow_rebase_merge": False, "delete_branch_on_merge": True,
         "allow_auto_merge": True,
     })
+    api(path + "/actions/permissions", "PUT", {
+        "enabled": True, "allowed_actions": "all", "sha_pinning_required": True,
+    })
+    api(path + "/actions/permissions/workflow", "PUT", {
+        "default_workflow_permissions": "read", "can_approve_pull_request_reviews": False,
+    })
     target = path + "/rulesets" + ("/" + str(existing[0]["id"]) if existing else "")
     result = api(target, "PUT" if existing else "POST", rules)
     api(path + "/vulnerability-alerts", "PUT")
