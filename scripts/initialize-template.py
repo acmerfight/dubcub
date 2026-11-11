@@ -25,13 +25,13 @@ def main():
     changes = []
     for name in filter(None, paths):
         source = ROOT / name
-        target = ROOT / name.replace("DubCub", args.name)
+        target = ROOT / name.replace("SwiftSeed", args.name)
         if source.is_symlink():
             parser.error("初始化不处理符号链接：" + name)
         content = source.read_text()
         updated = content if name == "TEMPLATE.md" else content.replace(
-            "com.acmerfight.dubcub", args.bundle_id
-        ).replace("DubCub", args.name)
+            "com.acmerfight.swiftseed", args.bundle_id
+        ).replace("SwiftSeed", args.name)
         if target != source and target.exists():
             parser.error("目标路径已存在：" + str(target))
         if target != source or updated != content:

@@ -4,8 +4,8 @@ cd "$(dirname "$0")/.."
 source scripts/xcode-env.sh
 
 case "${1:-iphone}" in
-    iphone) device_name='DubCub iPhone'; device_type='com.apple.CoreSimulator.SimDeviceType.iPhone-16' ;;
-    ipad) device_name='DubCub iPad'; device_type='com.apple.CoreSimulator.SimDeviceType.iPad-A16' ;;
+    iphone) device_name='SwiftSeed iPhone'; device_type='com.apple.CoreSimulator.SimDeviceType.iPhone-16' ;;
+    ipad) device_name='SwiftSeed iPad'; device_type='com.apple.CoreSimulator.SimDeviceType.iPad-A16' ;;
     *) printf '用法：bash scripts/run-simulator.sh [iphone|ipad]\n' >&2; exit 2 ;;
 esac
 runtime_id=$(xcrun simctl list runtimes --json | /usr/bin/python3 -c '
@@ -28,7 +28,7 @@ if [ -z "$device_id" ]; then
     device_id=$(xcrun simctl create "$device_name" "$device_type" "$runtime_id")
 fi
 xcrun simctl bootstatus "$device_id" -b
-app_path='build/DerivedData/Build/Products/Debug-iphonesimulator/DubCub.app'
+app_path='build/DerivedData/Build/Products/Debug-iphonesimulator/SwiftSeed.app'
 xcrun simctl install "$device_id" "$app_path"
 bundle_id=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$app_path/Info.plist")
 xcrun simctl launch --terminate-running-process "$device_id" "$bundle_id"

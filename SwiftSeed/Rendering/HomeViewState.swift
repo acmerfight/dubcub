@@ -10,8 +10,8 @@ public struct HomeViewState: Equatable, Sendable {
     }
 
     public static let initial = HomeViewState(
-        title: "DubCub",
-        subtitle: "欢迎来到你的配音工作台",
-        message: "这是用于验证 iPhone 和 iPad 安装的起始页面，配音功能将在后续加入。"
+        title: "SwiftSeed",
+        subtitle: "从这里开始你的下一个 App",
+        message: "这是支持 iPhone 和 iPad 的 Swift 应用模板。替换此页面，开始你的第一个功能。"
     )
 }

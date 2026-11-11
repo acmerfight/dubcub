@@ -1,4 +1,4 @@
-name: DubCub
+name: SwiftSeed
 options:
   minimumXcodeGenVersion: 2.46.0
   deploymentTarget:
@@ -15,47 +15,47 @@ settings:
     MARKETING_VERSION: "0.1.0"
     CURRENT_PROJECT_VERSION: 1
 targets:
-  DubCub:
+  SwiftSeed:
     type: application
     platform: iOS
     sources:
-      - path: DubCub
+      - path: SwiftSeed
         excludes:
           - Rendering
     dependencies:
-      - target: DubCubRendering
+      - target: SwiftSeedRendering
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.acmerfight.dubcub
+        PRODUCT_BUNDLE_IDENTIFIER: com.acmerfight.swiftseed
         SWIFT_DEFAULT_ACTOR_ISOLATION: MainActor
         TARGETED_DEVICE_FAMILY: "1,2"
         GENERATE_INFOPLIST_FILE: YES
-        INFOPLIST_KEY_CFBundleDisplayName: DubCub
+        INFOPLIST_KEY_CFBundleDisplayName: SwiftSeed
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
-  DubCubUITests:
+  SwiftSeedUITests:
     type: bundle.ui-testing
     platform: iOS
     sources:
-      - DubCubUITests
+      - SwiftSeedUITests
     dependencies:
-      - target: DubCub
+      - target: SwiftSeed
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.acmerfight.dubcub.uitests
+        PRODUCT_BUNDLE_IDENTIFIER: com.acmerfight.swiftseed.uitests
         GENERATE_INFOPLIST_FILE: YES
         TARGETED_DEVICE_FAMILY: "1,2"
-        TEST_TARGET_NAME: DubCub
-  DubCubRendering:
+        TEST_TARGET_NAME: SwiftSeed
+  SwiftSeedRendering:
     type: framework
     platform: iOS
     sources:
-      - DubCub/Rendering
+      - SwiftSeed/Rendering
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.acmerfight.dubcub.rendering
+        PRODUCT_BUNDLE_IDENTIFIER: com.acmerfight.swiftseed.rendering
         GENERATE_INFOPLIST_FILE: YES
         TARGETED_DEVICE_FAMILY: "1,2"
         ENABLE_USER_SCRIPT_SANDBOXING: NO
@@ -67,15 +67,15 @@ targets:
           bash "$SRCROOT/scripts/check-architecture.sh"
         basedOnDependencyAnalysis: false
 schemes:
-  DubCub:
+  SwiftSeed:
     build:
       targets:
-        DubCub: all
+        SwiftSeed: all
     run:
       config: Debug
     test:
       config: Debug
       targets:
-        - DubCubUITests
+        - SwiftSeedUITests
     archive:
       config: Release

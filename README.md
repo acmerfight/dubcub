@@ -1,10 +1,10 @@
-# DubCub
+# SwiftSeed
 
-A playful iOS app that helps kids practice English by dubbing fun cartoons and videos in their own voices.
+A reusable SwiftUI starter for iPhone and iPad apps, with strict state/rendering boundaries, core BDD, and verified CI.
 
-代码仓库：[acmerfight/dubcub](https://github.com/acmerfight/dubcub)。作为模板复用请先阅读 [TEMPLATE.md](TEMPLATE.md)，其中包含初始化命令、仓库保护设置和发布前责任。设计取舍、官方依据和验证边界见 [工程审查记录](ENGINEERING.md)。
+代码仓库：[acmerfight/swiftseed](https://github.com/acmerfight/swiftseed)。作为模板复用请先阅读 [TEMPLATE.md](TEMPLATE.md)，其中包含初始化命令、仓库保护设置和发布前责任。设计取舍、官方依据和验证边界见 [工程审查记录](ENGINEERING.md)。
 
-当前是支持 iPhone / iPad 的原生起始工程，只有静态欢迎页，尚未实现录音、配音、存储或导出。
+SwiftSeed 是用于创建多个独立 iPhone / iPad App 的工程模板。当前仅包含通用欢迎页，不预设具体业务。每个新 App 从 GitHub 的 **Use this template** 创建独立仓库，再按照 [初始化步骤](TEMPLATE.md) 替换名称与应用标识。
 
 ## 开发环境
 
@@ -27,7 +27,7 @@ bash scripts/doctor.sh
 
 ```sh
 python3 scripts/tools.py run xcodegen generate
-open DubCub.xcodeproj
+open SwiftSeed.xcodeproj
 bash scripts/check.sh
 bash scripts/verify-builds.sh
 bash scripts/test-simulator.sh iphone
@@ -58,9 +58,9 @@ CI 的基线检查使用 Xcode 26.3，与本地一致；`Current SDK` 和双设�
 
 | 配置 | 完整验证耗时 | 运行记录 |
 | --- | --- | --- |
-| 优化前，PR | 8 分 04 秒 | [42935370368](https://github.com/acmerfight/dubcub/actions/runs/42935370368) |
-| 优化前，合并后重复执行 | 5 分 29 秒 | [42936507808](https://github.com/acmerfight/dubcub/actions/runs/42936507808) |
-| 优化后，PR | 7 分 59 秒 | [42941308463](https://github.com/acmerfight/dubcub/actions/runs/42941308463) |
+| 优化前，PR | 8 分 04 秒 | [42935370368](https://github.com/acmerfight/swiftseed/actions/runs/42935370368) |
+| 优化前，合并后重复执行 | 5 分 29 秒 | [42936507808](https://github.com/acmerfight/swiftseed/actions/runs/42936507808) |
+| 优化后，PR | 7 分 59 秒 | [42941308463](https://github.com/acmerfight/swiftseed/actions/runs/42941308463) |
 
 样本不能证明完整模拟器验证已稳定加速，且优化后固定了与本地一致的 Xcode 26.3。以上为拆分定时 UI 工作流之前的数据，不代表当前 PR 耗时。当前通过调整测试频率缩短 PR 等待，UI 用例、断言和双设备覆盖保持不变。
 
@@ -96,8 +96,8 @@ bash scripts/run-simulator.sh ipad
 
 所有编码与审查遵守 [AGENTS.md](AGENTS.md)。
 
-- `DubCub/DubCubApp.swift`：应用组合入口，提供展示输入。
-- `DubCub/Rendering/`：独立渲染模块，只包含视图及不可变展示数据。应用依赖该模块，该模块不依赖应用实现。
+- `SwiftSeed/SwiftSeedApp.swift`：应用组合入口，提供展示输入。
+- `SwiftSeed/Rendering/`：独立渲染模块，只包含视图及不可变展示数据。应用依赖该模块，该模块不依赖应用实现。
 - `HomeViewState` 是只读展示值，不是业务状态容器或持久化模型。当前没有需要创建业务状态层的交互。
 - `scripts/architecture/`：基于语法树的边界检查，使用所选 Xcode 自带的 SwiftParser / SwiftSyntax。缺少解析器时检查失败，不会跳过。
 
@@ -105,6 +105,6 @@ bash scripts/run-simulator.sh ipad
 
 ## 验证范围
 
-本地开发基线为 Xcode 26.3；项目已通过架构规则样例、违规代码构建拦截、格式检查及模拟器编译，并在 iPhone 16 和 iPad A16 模拟器上完成安装、启动与画面检查。尚未验证真机签名与安装，当前也没有录音业务可供验证。
+本地开发基线为 Xcode 26.3；项目已通过架构规则样例、违规代码构建拦截、格式检查及模拟器编译，并在 iPhone 16 和 iPad A16 模拟器上完成安装、启动与画面检查。尚未验证真机签名与安装，当前没有业务功能可供验证。
 
 真机运行需在 Xcode 中选择自己的签名团队，并确认设备与所选 Xcode 兼容。个人签名配置、构建产物和本地凭证不应提交。

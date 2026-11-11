@@ -74,7 +74,7 @@ jobs:
       - name: Verify generated project is up to date
         run: |
           python3 scripts/tools.py run xcodegen generate
-          git diff --exit-code -- DubCub.xcodeproj
+          git diff --exit-code -- SwiftSeed.xcodeproj
 
   build:
     name: Build
