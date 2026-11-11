@@ -32,6 +32,19 @@ targets:
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad: UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight
+  DubCubUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - DubCubUITests
+    dependencies:
+      - target: DubCub
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.acmerfight.dubcub.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TARGETED_DEVICE_FAMILY: "1,2"
+        TEST_TARGET_NAME: DubCub
   DubCubRendering:
     type: framework
     platform: iOS
@@ -57,5 +70,9 @@ schemes:
         DubCub: all
     run:
       config: Debug
+    test:
+      config: Debug
+      targets:
+        - DubCubUITests
     archive:
       config: Release
