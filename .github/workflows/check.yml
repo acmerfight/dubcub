@@ -16,6 +16,23 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  required:
+    name: CI required
+    needs: [scope, lint, tests]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require successful checks, including an explicit scope decision
+        env:
+          SCOPE_RESULT: ${{ needs.scope.result }}
+          LINT_RESULT: ${{ needs.lint.result }}
+          TESTS_RESULT: ${{ needs.tests.result }}
+        run: |
+          test "$SCOPE_RESULT" = success
+          test "$LINT_RESULT" = success
+          test "$TESTS_RESULT" = success
+
   scope:
     name: Identify changes
     runs-on: ubuntu-latest
