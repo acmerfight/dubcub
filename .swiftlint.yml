@@ -13,6 +13,15 @@ excluded:
 disabled_rules:
   - opening_brace # SwiftFormat places braces after multiline conditions.
   - trailing_comma # SwiftFormat owns trailing commas, including Swift 6 syntax.
+  # SwiftFormat enforces these in the required check; avoid duplicate diagnostics.
+  - colon # spaceAroundOperators
+  - comma # spaceAroundOperators
+  - semicolon # semicolons
+  - leading_whitespace # indent
+  - trailing_whitespace # trailingSpace
+  - trailing_newline # linebreakAtEndOfFile
+  - vertical_whitespace # consecutiveBlankLines
+  - return_arrow_whitespace # spaceAroundOperators
 
 opt_in_rules:
   - force_unwrapping
@@ -25,6 +34,11 @@ opt_in_rules:
   - overridden_super_call
   - prohibited_super_call
   - weak_delegate
+  - discarded_notification_center_observer
+  - unavailable_function
+  - override_in_extension
+  - unneeded_escaping
+  - legacy_uigraphics_function
   - empty_count
   - empty_string
   - contains_over_filter_count
