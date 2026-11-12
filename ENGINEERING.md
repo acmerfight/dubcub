@@ -54,3 +54,29 @@ These samples do not establish a consistent speedup for full simulator verificat
 The public command surface is `./dev`. Apple tasks share build arguments and simulator selection; every downloaded CLI tool uses `tools.lock.json` and one verified installer. Portable CI checks all repository Shell and Python scripts as well as workflow YAML. A clean project generation is compared against tracked outputs to reject missing, stale, or untracked generated files without overwriting the working project. Template acceptance covers initialization with binary artwork and omission of a generated scheme.
 
 UI verification remains every 6 hours. A separate hourly Linux health check requires a recent successful default-branch UI run and fails for disabled workflows or failed verification. The 8-hour threshold includes scheduling grace; GitHub delay can also affect the monitor. Manual default-branch verification restores freshness but does not prove cron execution. GitHub-wide scheduling outages still require an external monitor. [GitHub schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule), [Notification ownership](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).
+
+## Swift rule selection · 2026-11-12
+
+The policy favors actionable diagnostics and a clear owner for each check. It is a template-specific decision, not a universal community rule set. [Swift's API guidelines](https://www.swift.org/documentation/api-design-guidelines/) prioritize clarity at the call site; naming, state ownership, and interface quality still need review.
+
+| Decision | Reason |
+| --- | --- |
+| Add `discarded_notification_center_observer` | Retain block-observer tokens so subscriptions can be removed. This checks retention, not eventual cleanup. [Rule](https://realm.github.io/SwiftLint/discarded_notification_center_observer.html) |
+| Add `unavailable_function` | Mark unsupported entry points unavailable instead of exposing an implementation that only traps. [Rule](https://realm.github.io/SwiftLint/unavailable_function.html) |
+| Add `override_in_extension` | Reject unsupported extension-based overrides; keep overrides on the owning class. [Rule](https://realm.github.io/SwiftLint/override_in_extension.html) |
+| Add `unneeded_escaping` | Avoid claiming a longer closure lifetime when it is only invoked synchronously. This is a syntax check, not a proof of ownership. [Rule](https://realm.github.io/SwiftLint/unneeded_escaping.html) |
+| Add `legacy_uigraphics_function` | Prefer the renderer API over legacy image-context functions. The local Xcode 26.3 header uses `API_TO_BE_DEPRECATED`, so do not assume compiler warnings already reject them. [Rule](https://realm.github.io/SwiftLint/legacy_uigraphics_function.html) |
+| Remove eight duplicate SwiftLint format checks | Colon, comma, semicolon, leading/trailing whitespace, final newline, repeated blank lines, and return-arrow spacing are enforced by the pinned formatter in the required check. Their replacement rules are named in `.swiftlint.yml`. Existing brace/comma conflict exclusions remain. [Formatter rules](https://github.com/nicklockwood/SwiftFormat/blob/0.62.1/Rules.md) |
+| Retain focused safety and complexity checks | Force operations, task errors, delegate ownership, super calls, unexplained empty blocks, empty XCTest methods, and complexity limits remain enforced. Deliberately empty blocks can explain their purpose with a comment. [Empty-block behavior](https://realm.github.io/SwiftLint/no_empty_block.html) |
+
+Do not enable every opt-in rule. SwiftLint identifies false positives, cost, and lack of consensus as reasons rules are opt-in; even [its own configuration](https://github.com/realm/SwiftLint/blob/0.65.1/.swiftlint.yml) excludes many style constraints. Keep formatter defaults rather than duplicating its style policy in a second tool. [SwiftLint selection guidance](https://github.com/realm/SwiftLint#opt-in-rules), [using both tools](https://github.com/nicklockwood/SwiftFormat#faq).
+
+Deliberate omissions:
+
+- Swift 5 compatibility annotations: this unreleased app uses Swift 6; `incompatible_concurrency_annotation` adds compatibility annotations rather than strengthening concurrency safety. [Rule](https://realm.github.io/SwiftLint/incompatible_concurrency_annotation.html)
+- Mandatory paired XCTest setup/teardown: cleanup belongs to actual resources, often via `defer` or teardown blocks. Requiring an otherwise empty method adds ceremony without proving cleanup. [Rule](https://realm.github.io/SwiftLint/balanced_xctest_lifecycle.html)
+- Mandatory documentation on every symbol, explicit types/access everywhere, magic-number bans, and extra layout rules: these can add noise without proving the architectural requirements. Document meaningful public contracts and review their use.
+- Full `unused_declaration` / `unused_import` analysis: these require a separate clean compiler-log analysis and are considerably slower than lint. Reconsider when code size and demonstrated dead-code problems justify that cost. No analyzer coverage is claimed. [Analyzer requirements](https://github.com/realm/SwiftLint#analyze)
+- Additional feature-specific UIKit, localization, and accessibility rules: evaluate false positives against real usage before enabling them. Syntax rules do not replace accessibility audits or device acceptance.
+
+Verification used the pinned tools and actual configuration: all five newly selected diagnostics were absent before the change, then rejected their violating examples while accepting corrected examples. All eight delegated format categories were rejected by SwiftFormat and passed after formatting. These are configuration acceptance probes, not a duplicate permanent suite for upstream rule implementations. Application behavior, required PR checks, and the six-hour UI schedule are unchanged.
