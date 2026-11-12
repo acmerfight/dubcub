@@ -35,3 +35,22 @@ A minimum deployment target of 17 only constrains the APIs allowed by the compil
 Automated accessibility audits do not replace actual VoiceOver, keyboard, or resizable iPad window checks. Unsigned Release compilation does not replace signed archives, physical-device execution, or store uploads. Reusing projects remain responsible for signing, icons, versions, distribution, licensing, and actual product privacy information.
 
 Review versions, sources, generated project differences, and core BDD whenever upgrading toolchains or dependencies. Update this record when SDK requirements change, runners are retired, or real user issues arise. Keeping versions pinned forever is not reproducibility.
+
+#### Historical CI measurements (2026-11-11, when UI tests still gated PRs)
+
+These durations run from workflow creation to completion of all jobs, including queuing. All runs used standard free runners and executed one welcome-screen BDD per device.
+
+| Configuration | Full verification time | Run |
+| --- | --- | --- |
+| Before optimization, PR | 8 min 04 sec | [42935370368](https://github.com/acmerfight/swiftseed/actions/runs/42935370368) |
+| Before optimization, duplicate post-merge run | 5 min 29 sec | [42936507808](https://github.com/acmerfight/swiftseed/actions/runs/42936507808) |
+| After optimization, PR | 7 min 59 sec | [42941308463](https://github.com/acmerfight/swiftseed/actions/runs/42941308463) |
+
+These samples do not establish a consistent speedup for full simulator verification. The optimization also pinned Xcode 26.3 to match local development. These measurements predate the separate scheduled UI workflow and do not represent current PR durations. That later split reduced PR waiting by changing test frequency while preserving the UI cases, assertions, and coverage of both device types that existed at the time.
+
+
+## Developer workflow audit follow-up · 2026-11-12
+
+The public command surface is `./dev`. Apple tasks share build arguments and simulator selection; every downloaded CLI tool uses `tools.lock.json` and one verified installer. Portable CI checks all repository Shell and Python scripts as well as workflow YAML. A clean project generation is compared against tracked outputs to reject missing, stale, or untracked generated files without overwriting the working project. Template acceptance covers initialization with binary artwork and omission of a generated scheme.
+
+UI verification remains every 6 hours. A separate hourly Linux health check requires a recent successful default-branch UI run and fails for disabled workflows or failed verification. The 8-hour threshold includes scheduling grace; GitHub delay can also affect the monitor. Manual default-branch verification restores freshness but does not prove cron execution. GitHub-wide scheduling outages still require an external monitor. [GitHub schedule limitations](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#schedule), [Notification ownership](https://docs.github.com/en/actions/concepts/workflows-and-actions/notifications-for-workflow-runs).

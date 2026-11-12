@@ -44,10 +44,14 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - name: Lint all workflows and embedded shell scripts
-        run: bash scripts/check-workflows.sh
+      - name: Install portable checks and security tools
+        run: |
+          ./dev setup portable
+          ./dev setup security
+      - name: Check workflows, Shell, Python and health behavior
+        run: ./dev check portable
       - name: Scan Git history for secrets (redacted output)
-        run: bash scripts/check-secrets.sh
+        run: ./dev check secrets
       - name: Audit workflow security
         uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
         with:
@@ -70,13 +74,9 @@ jobs:
           persist-credentials: false
       - name: Install development tools
         run: |
-          python3 scripts/tools.py install
+          ./dev setup apple
       - name: Check code, architecture and formatting
-        run: bash scripts/check.sh
-      - name: Verify generated project is up to date
-        run: |
-          python3 scripts/tools.py run xcodegen generate
-          git diff --exit-code -- SwiftSeed.xcodeproj
+        run: ./dev check apple
 
   build:
     name: Build
@@ -88,9 +88,9 @@ jobs:
           persist-credentials: false
       - name: Install development tools
         run: |
-          python3 scripts/tools.py install
+          ./dev setup apple
       - name: Verify Debug tests and Release device compilation
-        run: bash scripts/verify-builds.sh
+        run: ./dev build
 
   current-sdk:
     name: Current SDK
@@ -104,6 +104,6 @@ jobs:
         with:
           persist-credentials: false
       - name: Install development tools
-        run: python3 scripts/tools.py install
+        run: ./dev setup apple
       - name: Verify current SDK Debug tests and Release device compilation
-        run: bash scripts/verify-builds.sh
+        run: ./dev build
