@@ -63,8 +63,7 @@ targets:
       - name: Check lint and rendering boundaries
         script: |
           set -euo pipefail
-          bash "$SRCROOT/scripts/lint.sh"
-          bash "$SRCROOT/scripts/check-architecture.sh"
+          bash "$SRCROOT/dev" check swift
         basedOnDependencyAnalysis: false
 schemes:
   SwiftSeed:

@@ -236,7 +236,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -euo pipefail\nbash \"$SRCROOT/scripts/lint.sh\"\nbash \"$SRCROOT/scripts/check-architecture.sh\"\n";
+			shellScript = "set -euo pipefail\nbash \"$SRCROOT/dev\" check swift\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

@@ -8,3 +8,6 @@ xcuserdata/
 .env.*
 !.env.example
 Config/Local.xcconfig
+
+__pycache__/
+.ruff_cache/

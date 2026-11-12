@@ -1,0 +1,32 @@
+#!/bin/bash
+# The public entry point used by developers, Xcode, and CI.
+set -euo pipefail
+cd "$(dirname "$0")"
+case "${1:-help}" in
+    setup) shift; python3 scripts/tools.py install "$@" ;;
+    check) shift; bash scripts/check.sh "$@" ;;
+    build|run|test|generate|doctor) bash scripts/apple.sh "$@" ;;
+    format)
+        python3 scripts/tools.py run ruff check . --fix
+        python3 scripts/tools.py run ruff format .
+        python3 scripts/tools.py run swiftformat .
+        ;;
+    init) shift; python3 scripts/initialize-template.py "$@" ;;
+    configure) shift; python3 scripts/configure-repository.py "$@" ;;
+    ui-health) shift; python3 scripts/ui_health.py "$@" ;;
+    help|--help|-h)
+        printf '%s\n' \
+            './dev setup [all|apple|portable|security]  Install pinned tools' \
+            './dev check [all|apple|portable|project|swift|secrets]  Run strict checks' \
+            './dev build                              Compile Debug tests and Release device app' \
+            './dev run [iphone|ipad]                  Install and launch in Simulator' \
+            './dev test [iphone|ipad]                 Run core UI BDD in Simulator' \
+            './dev generate                          Regenerate the Xcode project' \
+            './dev format                            Apply Python and Swift formatting' \
+            './dev doctor                            Check the local Apple environment' \
+            './dev init --name MyApp --bundle-id com.example.myapp' \
+            './dev configure OWNER/REPO               Apply repository protections' \
+            './dev ui-health OWNER/REPO               Check recent default-branch UI verification'
+        ;;
+    *) printf 'Unknown command: %s. Run ./dev help.\n' "$1" >&2; exit 2 ;;
+esac
