@@ -148,8 +148,16 @@ guard !roots.isEmpty else {
 
 var files: [URL] = []
 for root in roots {
+    let url = URL(fileURLWithPath: root)
+    var isDirectory: ObjCBool = false
+    if FileManager.default.fileExists(atPath: url.path, isDirectory: &isDirectory),
+       !isDirectory.boolValue, url.pathExtension == "swift"
+    {
+        files.append(url)
+        continue
+    }
     guard let entries = FileManager.default.enumerator(
-        at: URL(fileURLWithPath: root),
+        at: url,
         includingPropertiesForKeys: nil
     ) else {
         print("error: Cannot read directory \(root)")

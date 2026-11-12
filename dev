@@ -3,7 +3,16 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 case "${1:-help}" in
-    setup) shift; python3 scripts/tools.py install "$@" ;;
+    setup)
+        group=${2:-all}
+        shift
+        python3 scripts/tools.py install "$@"
+        if [ "$group" = all ] || [ "$group" = hooks ]; then
+            python3 scripts/tools.py run pre-commit install --install-hooks
+        fi
+        ;;
+    hooks) shift; python3 scripts/tools.py run pre-commit "$@" ;;
+    hook) shift; bash scripts/check.sh hook "$@" ;;
     check) shift; bash scripts/check.sh "$@" ;;
     build|run|test|generate|doctor) bash scripts/apple.sh "$@" ;;
     format)
@@ -16,7 +25,9 @@ case "${1:-help}" in
     ui-health) shift; python3 scripts/ui_health.py "$@" ;;
     help|--help|-h)
         printf '%s\n' \
-            './dev setup [all|apple|portable|security]  Install pinned tools' \
+            './dev setup [all|apple|portable|security|hooks]  Install pinned tools; all/hooks installs commit hook' \
+            './dev hooks run                         Check staged content without committing' \
+            './dev hooks install                     Reinstall the commit hook' \
             './dev check [all|apple|portable|project|swift|secrets]  Run strict checks' \
             './dev build                              Compile Debug tests and Release device app' \
             './dev run [iphone|ipad]                  Install and launch in Simulator' \

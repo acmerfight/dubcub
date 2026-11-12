@@ -82,6 +82,14 @@ class TemplateAcceptance(unittest.TestCase):
             commit(root)
             checked = command(root, "./dev", "check", "project")
             self.assertEqual(checked.returncode, 0, checked.stdout + checked.stderr)
+            installed = command(root, "./dev", "hooks", "install")
+            self.assertEqual(installed.returncode, 0, installed.stdout + installed.stderr)
+            rendering = root / "SampleApp/Rendering/HookProbe.swift"
+            rendering.write_text("import Foundation\n")
+            command(root, "git", "add", str(rendering)).check_returncode()
+            rejected = command(root, "git", "commit", "-qm", "Invalid rendering boundary")
+            self.assertNotEqual(rejected.returncode, 0)
+            self.assertIn("Rendering may only import SwiftUI", rejected.stdout + rejected.stderr)
 
     def test_given_uncommitted_generated_scheme_when_checked_then_delivery_is_blocked(self):
         # Given: a committed configuration change without its new generated scheme.

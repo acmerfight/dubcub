@@ -6,6 +6,7 @@ import json
 import os
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -19,6 +20,8 @@ PLATFORM = f"{sys.platform}-{'arm64' if platform.machine() in ('arm64', 'aarch64
 
 
 def artifact(name):
+    if "requirements" in TOOLS[name]:
+        return TOOLS[name]
     try:
         return TOOLS[name]["artifacts"][PLATFORM]
     except KeyError as error:
@@ -43,6 +46,38 @@ def verify(name):
 
 def install(name):
     release = artifact(name)
+    if "requirements" in release:
+        expected = (ROOT / release["python_version_file"]).read_text().strip()
+        current = f"{sys.version_info.major}.{sys.version_info.minor}"
+        candidate = sys.executable if current == expected else shutil.which("python" + expected)
+        if not candidate:
+            raise RuntimeError(f"Install Python {expected} from .python-version before ./dev setup hooks.")
+        actual = subprocess.check_output(
+            [candidate, "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"],
+            text=True,
+        ).strip()
+        if actual != expected:
+            raise RuntimeError(f"Expected Python {expected}, found {actual}.")
+        print(f"Installing hook tools with Python {actual}: {candidate}", flush=True)
+        destination = binary_path(name).parent.parent
+        subprocess.run([candidate, "-m", "venv", str(destination)], check=True)
+        subprocess.run(
+            [
+                str(destination / "bin/python"),
+                "-m",
+                "pip",
+                "install",
+                "--disable-pip-version-check",
+                "--require-hashes",
+                "--only-binary=:all:",
+                "-r",
+                str(ROOT / release["requirements"]),
+            ],
+            check=True,
+        )
+        verify(name)
+        print(f"{name} {release['version']} verified and installed in an isolated environment.")
+        return
     # Extract only the executable and declared support resources from a verified artifact.
     with tempfile.TemporaryDirectory() as directory:
         archive = Path(directory) / "download"
@@ -106,7 +141,7 @@ def main():
         return
     if args and args[0] in ("install", "check") and len(args) <= 2:
         group = args[1] if len(args) == 2 else "all"
-        if group not in ("all", "apple", "portable", "security"):
+        if group not in ("all", "apple", "portable", "security", "hooks"):
             raise RuntimeError("Unknown tool group: " + group)
         names = [name for name, tool in TOOLS.items() if group == "all" or tool["group"] == group]
         for name in names:
@@ -118,7 +153,7 @@ def main():
                 verify(name)
                 print(f"{name} {TOOLS[name]['version']} OK")
         return
-    raise RuntimeError("Usage: tools.py install|check [all|apple|portable|security] | run TOOL [ARGS]")
+    raise RuntimeError("Usage: tools.py install|check [all|apple|portable|security|hooks] | run TOOL [ARGS]")
 
 
 if __name__ == "__main__":
