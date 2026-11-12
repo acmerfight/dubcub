@@ -11,7 +11,7 @@ public struct HomeViewState: Equatable, Sendable {
 
     public static let initial = HomeViewState(
         title: "SwiftSeed",
-        subtitle: "从这里开始你的下一个 App",
-        message: "这是支持 iPhone 和 iPad 的 Swift 应用模板。替换此页面，开始你的第一个功能。"
+        subtitle: "Your next app starts here",
+        message: "A Swift app template for iPhone and iPad. Replace this screen to build your first feature."
     )
 }

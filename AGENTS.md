@@ -1,73 +1,77 @@
-# 编码与交付约定
+# Coding and delivery requirements
 
-以下是编码、重构和审查的硬性要求，不得以演示、开发便利或赶进度为由放宽。环境、目录与操作命令见 [README.md](README.md)，工程配置以 `project.yml` 为准。
+These requirements are mandatory for coding, refactoring, and review. Do not relax them for demos, convenience, or deadlines. See [README.md](README.md) for the environment, layout, and commands; `project.yml` is the source of truth for project configuration.
 
-## 当前阶段
+## Repository language
 
-项目尚未发布，只维护最新设计。不增加兼容层、旧格式读取、数据迁移或兼容测试。当前格式下的保存失败、数据损坏和中断恢复仍属于正确性问题，按核心用户承诺验证。
+Use English for documentation, code comments, test scenarios, development tool output, and sample UI text. Keep a single English README. Add product localization only when explicitly required by the product; do not introduce translated documentation or mixed-language developer messages by default.
 
-## 交付流程：纵向切分，BDD 先行
+## Current stage
 
-1. 先明确用户入口，并写清楚：“完成后，用户可以做什么，并看到什么结果。”每次交付形成可用的最小闭环，范围过大就缩小功能，不按技术层拆成无法使用的半成品。
-2. 功能新增或行为修复先写核心 BDD：Given 描述用户情境，When 描述用户操作，Then 描述可感知结果，用断言验证。确认测试因预期问题失败后再实现。
-3. 在已有可用流程上做满足当前切片的最小改动。抽象必须服务于当前真实需求、重复或边界，不为假想需求预建框架。
-4. 验收覆盖承诺的实际使用路径。底层测试通过不能单独证明用户功能可用；交付时说明用户结果、验证证据和未验证项。
+The project is unreleased and maintains only the latest design. Do not add compatibility layers, legacy format readers, data migrations, or compatibility tests. Save failures, data corruption, and interruption recovery in the current format remain correctness concerns and must be verified against core user promises.
 
-## 测试策略：核心行为，最少必要分层
+## Delivery: vertical slices, BDD first
 
-- 只补充核心、用户可感知的 BDD；失败场景仅覆盖会破坏核心承诺的情况。用户不可感知的内部细节暂不新增测试，不追求测试数量或覆盖率。
-- 在能可靠证明承诺的最低层测试：核心行为以状态层为主；保存等真实副作用补必要的集成验证；极少量界面测试确认关键用户路径连通。仅为该层无法证明的关键风险向上补测，不跨层重复穷举。
-- 断言公开结果与状态，不锁死私有函数、内部调用顺序或实现形状。保存成功需验证实际写入及重新读取；依赖设备能力的实际效果需真机验证，不能用模拟成功代替。
-- 纯文档修改和不改变行为的机械重构无需新增测试。开发时运行相关检查，交付前完成本次改动所需的验证；结果有效且没有新改动或新风险时，不反复重跑。
+1. Identify the user entry point and state: "After this change, what can the user do, and what result can they observe?" Deliver a usable minimum end-to-end slice. Reduce feature scope if necessary; do not split by technical layer into unusable partial deliveries.
+2. Before adding a feature or fixing behavior, write core BDD: Given describes the user context, When the user action, and Then the observable result, verified by assertions. Confirm that the test fails for the expected reason before implementing the change.
+3. Make the smallest change to the existing usable flow that satisfies the current slice. Abstractions must serve real requirements, duplication, or boundaries; do not prebuild frameworks for hypothetical needs.
+4. Acceptance must cover the promised usage path. Passing lower-level tests alone does not prove a user feature works. Report the user outcome, verification evidence, and unverified areas at delivery.
 
-## 设计约束
+## Testing: core behavior, minimum necessary layers
 
-### 最少必要状态
+- Add only core, user-perceptible BDD. Cover failures only when they threaten a core promise. Do not add tests for imperceptible internals or pursue test counts or coverage targets.
+- Test at the lowest layer that reliably proves the promise: primarily the state layer for core behavior, necessary integration checks for real side effects such as persistence, and very few UI tests to prove key user paths connect. Move up a layer only for critical risks the lower layer cannot prove; do not exhaustively duplicate coverage across layers.
+- Assert public outcomes and state, not private functions, internal call order, or implementation shape. Successful persistence requires verification of actual writes and reads. Device-dependent behavior and its actual effects require physical-device verification; simulated success is insufficient.
+- Documentation-only changes and behavior-preserving mechanical refactors need no new tests. Run relevant checks during development and complete the necessary verification before delivery. Do not rerun valid checks without new changes or risks.
 
-每份状态都会增加同步和维护责任。能从现有数据计算的值不重复保存，不用额外同步逻辑维持多份事实。历史事实必须保留，不能用当前数据重新计算替代。
+## Design constraints
 
-缓存和冗余必须明确唯一可信来源、更新责任及失效规则；移除优化后结果仍应正确。
+### Minimum necessary state
 
-### 独立状态与明确所有权
+Every stored value adds synchronization and maintenance responsibility. Do not store values derivable from existing data or add synchronization logic to maintain duplicate facts. Preserve historical facts rather than recomputing them from current data.
 
-按业务职责和生命周期拆分状态，拿不准时先拆；同页展示不是合并状态的理由。每类状态有明确所有者和写入入口，其他模块通过业务操作协作。同一业务规则只有一个权威实现。
+Caches and redundant data require an explicit source of truth, update owner, and invalidation rules. Removing an optimization must preserve correctness.
 
-数据结构默认严格遵守范式；只有真实负载下、确实影响用户体验的性能证据，才支持讨论反范式设计。
+### Independent state and explicit ownership
 
-### 数据边界与类型约束
+Separate state by business responsibility and lifecycle; when uncertain, split first. Appearing on the same screen is not a reason to merge state. Each kind of state has an explicit owner and write entry point. Modules collaborate through business operations. Each business rule has one authoritative implementation.
 
-外部数据在入口完成解析和校验，再转换为明确的内部类型。无效数据应明确失败，不得用默认值掩盖错误；业务内部不重复维护同一套校验规则。
+Data structures must follow strict normalization by default. Discuss denormalization only with performance evidence from real workloads showing an actual impact on user experience.
 
-必需数据保持必需，只有缺失具有业务含义时才允许为空。互斥状态及各自所需的数据一起建模，避免构造出矛盾组合。类型已排除的情况，不再用重复防御和测试兜底。
+### Data boundaries and type constraints
 
-### 状态与渲染严格分离
+Parse and validate external data at entry points, then convert it into explicit internal types. Invalid data must fail explicitly; do not hide errors behind defaults or duplicate the same validation rules throughout the business layer.
 
-业务状态和交互状态由独立状态层管理。渲染层只接收只读展示数据并传出用户事件，不持有或修改可变状态，不访问存储或执行业务副作用。
+Keep required data required. Allow absence only when it has business meaning. Model mutually exclusive states together with their required data to prevent contradictory combinations. Do not add redundant defenses or tests for cases already excluded by types.
 
-框架适配层只负责连接，不承载业务规则或维护第二份业务状态。业务结果不得依赖界面生命周期或刷新顺序。
+### Strict separation of state and rendering
 
-### 纯函数与外置副作用
+Independent state layers own business and interaction state. Rendering receives only read-only presentation data and emits user events. It must not own or mutate state, access storage, or perform business side effects.
 
-计算和业务规则显式接收所需数据并返回结果，不隐式读写外部状态。读取状态、请求资源和保存结果由外层负责。把函数移出界面但仍随意读取整个状态容器，不算解耦。
+Framework adapters only connect layers. They must not contain business rules or maintain a second copy of business state. Business outcomes must not depend on view lifecycle or refresh order.
 
-### 专用、小而明确的接口
+### Pure functions and external side effects
 
-接口表达业务操作，不开放任意改字段或改状态的通用入口。“小”指调用方需要知道的事情少，同一操作应复用。
+Calculations and business rules explicitly receive the data they need and return results without implicitly reading or writing external state. Outer layers read state, request resources, and persist results. Moving a function out of a view while it still freely accesses the whole state container is not decoupling.
 
-一次操作必须保证的一致性由接口内部完成。明确调用前提、成功结果、失败后的写入情况，以及重试、取消和并发处理，并由实现保证。
+### Dedicated, small, explicit interfaces
 
-### 平台与并发边界
+Interfaces express business operations rather than exposing generic field or status mutation. "Small" means callers need to know little; the same operation should be reusable.
 
-界面按可用窗口空间和用户字号布局，不能把设备型号、方向或固定屏幕尺寸当作布局前提。核心内容在窄窗口、横屏和辅助字号下仍须可读、可达；系统控件的滚动和布局不应复制成自管状态。
+An operation must enforce its own consistency requirements internally. Define and implement preconditions, success outcomes, write effects after failure, and retry, cancellation, and concurrency behavior.
 
-窗口内的导航、选择和编辑会话由该窗口的状态层拥有；仅真正共享的数据才跨窗口共享。关闭、切换或缩放窗口不能隐式丢失已承诺保存的数据。
+### Platform and concurrency boundaries
 
-并发任务有明确所有者、取消时机和结果提交条件；旧请求不能覆盖新操作，取消不能冒充成功。耗时工作不得阻塞界面，异步不等于后台执行。不得用关闭并发检查或不安全声明掩盖所有权问题。
+Lay out UI according to available window space and the user's text size, not device models, orientation assumptions, or fixed screen dimensions. Core content must remain readable and reachable in narrow windows, landscape, and accessibility text sizes. Do not duplicate system scrolling or layout behavior as managed state.
 
-## 审查与完成标准
+Each window's state layer owns its navigation, selection, and editing session. Share only genuinely shared data across windows. Closing, switching, or resizing a window must not implicitly lose data promised to be saved.
 
-- PR 必须通过安全检查。密钥不得进入代码或日志，扫描输出必须脱敏；第三方工具固定版本并校验来源，工作流按最小权限运行。安全检查失败必须修复或给出经审查的具体误报依据，不得通过整体禁用、降低门槛或绕过保护合并。
-- 所有改动通过分支和 PR 合并，禁止直接推送主分支或绕过保护。合并前必须通过最新提交的 lint、架构、工程一致性、编译及汇总检查，并解决审查讨论；使用 squash 合并。双设备 UI 测试每 6 小时在主分支运行，支持手动触发，不再作为每次 PR 的合并门禁；失败必须处理，发布前需确认对应版本通过。后续新增状态层核心 BDD 时纳入每次代码 PR 的快速检查。
-- 优先审查：状态是否必要、业务是否被不当绑定、谁能修改数据、规则由谁保证、未来修改会牵动谁。测试通过不能替代这些判断。
-- 用模块边界和访问权限限制依赖与写入，用类型表达合法状态，用静态检查执行稳定规则；格式问题交给工具。测试始终遵循核心用户 BDD 的范围。
-- 检查最终差异，保持改动聚焦并同步受影响的说明。验证结果必须对应实际交付版本；不得把未执行或失败的验证报告为通过。
+Concurrent tasks need explicit owners, cancellation timing, and result acceptance conditions. Stale requests must not overwrite newer actions, and cancellation must not masquerade as success. Expensive work must not block the UI; asynchronous does not mean background execution. Do not hide ownership problems by disabling concurrency checks or using unsafe declarations.
+
+## Review and completion criteria
+
+- PRs must pass security checks. Keep secrets out of code and logs, and redact scan output. Pin third-party tool versions and verify their provenance. Use least-privilege workflows. Fix security failures or provide reviewed evidence of a specific false positive; do not merge by disabling checks wholesale, lowering thresholds, or bypassing protections.
+- Merge all changes through branches and PRs. Never push directly to the main branch or bypass protections. Before squash merging, the latest commit must pass lint, architecture, project consistency, compilation, and aggregate checks, and review discussions must be resolved. UI tests on both device types run on main every 6 hours and can be triggered manually; they do not gate every PR. Address failures and verify the relevant version before release. Add future core state-layer BDD to the fast checks for every code PR.
+- Prioritize whether state is necessary, business concerns are improperly coupled, who may modify data, who enforces rules, and who will be affected by future changes. Passing tests cannot replace these judgments.
+- Use module boundaries and access control to constrain dependencies and writes, types to express valid states, and static checks to enforce stable rules. Leave formatting to tools. Keep tests within the scope of core user BDD.
+- Review the final diff, keep changes focused, and update affected documentation. Verification results must correspond to the delivered version. Never report unexecuted or failed verification as passing.

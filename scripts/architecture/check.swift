@@ -19,7 +19,7 @@ final class RenderingRules: SyntaxVisitor {
 
     override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
         if node.path.first?.name.text != "SwiftUI" {
-            reject(node, "渲染模块只能导入 SwiftUI；服务和状态实现应由外层连接。")
+            reject(node, "Rendering may only import SwiftUI; connect services and state in outer layers.")
         }
         return .visitChildren
     }
@@ -27,7 +27,7 @@ final class RenderingRules: SyntaxVisitor {
     override func visit(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
         let name = node.attributeName.trimmedDescription.split(separator: ".").last.map(String.init) ?? ""
         if !["ViewBuilder", "available", "MainActor"].contains(name) {
-            reject(node, "渲染层不允许 @\(name)；状态持有、观察和绑定应由外层处理。")
+            reject(node, "Rendering cannot use @\(name); own, observe, and bind state in outer layers.")
         }
         return .visitChildren
     }
@@ -39,7 +39,7 @@ final class RenderingRules: SyntaxVisitor {
 
         for binding in node.bindings {
             guard let block = binding.accessorBlock else {
-                reject(binding, "渲染层的存储属性必须是 let，不能持有可变状态。")
+                reject(binding, "Rendering stored properties must use let; mutable state is not allowed.")
                 continue
             }
             switch block.accessors {
@@ -47,22 +47,22 @@ final class RenderingRules: SyntaxVisitor {
                 break
             case let .accessors(accessors):
                 if accessors.contains(where: { $0.accessorSpecifier.text != "get" }) {
-                    reject(binding, "渲染层不能提供 setter 或属性观察器。")
+                    reject(binding, "Rendering cannot provide setters or property observers.")
                 }
             @unknown default:
-                reject(binding, "未知属性访问方式，需先更新架构检查。")
+                reject(binding, "Unknown property accessor; update the architecture checker first.")
             }
         }
         return .visitChildren
     }
 
     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-        reject(node, "渲染模块使用值类型；引用状态和服务应放在外层。")
+        reject(node, "Use value types in rendering; keep reference state and services in outer layers.")
         return .visitChildren
     }
 
     override func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
-        reject(node, "渲染模块不得定义状态所有者或服务。")
+        reject(node, "Rendering must not define state owners or services.")
         return .visitChildren
     }
 
@@ -75,7 +75,10 @@ final class RenderingRules: SyntaxVisitor {
             "task", "onAppear", "onDisappear", "onChange", "onReceive",
         ]
         if forbidden.contains(name) {
-            reject(token, "渲染层不能使用 \(name)；生命周期、绑定和副作用应由外层处理。")
+            reject(
+                token,
+                "Rendering cannot use \(name); handle lifecycle, bindings, and side effects in outer layers."
+            )
         }
         return .visitChildren
     }
@@ -83,7 +86,8 @@ final class RenderingRules: SyntaxVisitor {
 
 func check(source: String, file: String) -> [String] {
     let tree = Parser.parse(source: source)
-    guard !tree.hasError else { return ["\(file):1:1: error: 无法解析，不能跳过架构检查。"] }
+    guard !tree.hasError
+    else { return ["\(file):1:1: error: Cannot parse source; architecture checks must not be skipped."] }
     let rules = RenderingRules(tree: tree, file: file)
     rules.walk(tree)
     return rules.diagnostics
@@ -119,16 +123,16 @@ func selfTest() -> Bool {
     for (index, source) in allowed.enumerated()
         where !check(source: source, file: "allowed-\(index)").isEmpty
     {
-        print("error: 架构检查误拒绝合法样例 \(index)")
+        print("error: Architecture checker rejected valid fixture \(index)")
         failures += 1
     }
     for (index, source) in rejected.enumerated()
         where check(source: source, file: "rejected-\(index)").isEmpty
     {
-        print("error: 架构检查漏过违规样例 \(index)")
+        print("error: Architecture checker accepted invalid fixture \(index)")
         failures += 1
     }
-    print("架构规则验证：\(allowed.count + rejected.count) 个样例，\(failures) 个失败。")
+    print("Architecture checks: \(allowed.count + rejected.count) fixtures, \(failures) failures.")
     return failures == 0
 }
 
@@ -138,7 +142,7 @@ if CommandLine.arguments.dropFirst() == ["--self-test"] {
 
 let roots = CommandLine.arguments.dropFirst()
 guard !roots.isEmpty else {
-    print("error: 请提供渲染代码目录。")
+    print("error: Provide the rendering source directory.")
     exit(1)
 }
 
@@ -148,7 +152,7 @@ for root in roots {
         at: URL(fileURLWithPath: root),
         includingPropertiesForKeys: nil
     ) else {
-        print("error: 无法读取目录 \(root)")
+        print("error: Cannot read directory \(root)")
         exit(1)
     }
     for case let file as URL in entries where file.pathExtension == "swift" {
@@ -157,7 +161,7 @@ for root in roots {
 }
 
 guard !files.isEmpty else {
-    print("error: 未找到渲染代码，检查不能空跑。")
+    print("error: No rendering source found; checks must not run empty.")
     exit(1)
 }
 
@@ -168,7 +172,7 @@ for file in files.sorted(by: { $0.path < $1.path }) {
 
 diagnostics.forEach { print($0) }
 if diagnostics.isEmpty {
-    print("渲染边界检查通过（\(files.count) 个文件）。")
+    print("Rendering boundary checks passed (\(files.count) files).")
 }
 
 exit(diagnostics.isEmpty ? 0 : 1)

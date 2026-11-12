@@ -1,12 +1,10 @@
 # SwiftSeed
 
-**English** | [简体中文](README.zh-CN.md)
-
 A reusable SwiftUI project template for iPhone and iPad, with strict state/rendering boundaries, core BDD, and verified CI.
 
-Repository: [acmerfight/swiftseed](https://github.com/acmerfight/swiftseed). To reuse this template, start with [TEMPLATE.md](TEMPLATE.md) (Chinese), which covers initialization, repository protections, and responsibilities before release. See the [engineering review](ENGINEERING.md) (Chinese) for design decisions, official references, and verification limits.
+Repository: [acmerfight/swiftseed](https://github.com/acmerfight/swiftseed). To reuse this template, start with [TEMPLATE.md](TEMPLATE.md), which covers initialization, repository protections, and responsibilities before release. See the [engineering review](ENGINEERING.md) for design decisions, official references, and verification limits.
 
-SwiftSeed is a starting point for multiple independent iPhone and iPad apps. It currently contains a generic welcome screen with no predefined business features. For each new app, choose **Use this template** on GitHub to create a separate repository, then follow the [initialization steps](TEMPLATE.md) (Chinese) to replace the name and app identifier.
+SwiftSeed is a starting point for multiple independent iPhone and iPad apps. It currently contains a generic welcome screen with no predefined business features. For each new app, choose **Use this template** on GitHub to create a separate repository, then follow the [initialization steps](TEMPLATE.md) to replace the name and app identifier.
 
 ## Development environment
 
@@ -52,7 +50,7 @@ New PR commits cancel older checks. Scheduled and manual UI runs do not interrup
 
 Baseline CI checks use Xcode 26.3, matching local development. `Current SDK` and scheduled UI tests on both device types use pinned Xcode 27.2 on GitHub's `xcode-27` preview runner. Its availability risks are documented in the engineering review; failures are never automatically skipped. Tool versions come from the lock file. Scheduled UI jobs start the simulator after installing tools and overlap startup with `build-for-testing`. Once startup and compilation succeed, `test-without-building` uses those same build products. Logs report compilation, remaining startup wait, and test durations separately so optimization can be assessed with actual measurements. Test results are not cached, tests are not automatically retried, and device coverage is not reduced to improve speed.
 
-There are currently two core UI BDD scenarios: app installed → open it → see the welcome message; largest accessibility text size and landscape orientation → open and scroll → read unclipped text and reach the description. The latter includes a system accessibility audit and covers an observed reading problem. Add future core business behavior at the lowest reliable test layer, following [AGENTS.md](AGENTS.md) (Chinese), without adding tests to meet a count.
+There are currently two core UI BDD scenarios: app installed → open it → see the welcome message; largest accessibility text size and landscape orientation → open and scroll → read unclipped text and reach the description. The latter includes a system accessibility audit and covers an observed reading problem. Add future core business behavior at the lowest reliable test layer, following [AGENTS.md](AGENTS.md), without adding tests to meet a count.
 
 #### Historical CI measurements (2026-11-11, when UI tests still gated PRs)
 
@@ -96,7 +94,7 @@ The script generates the project, builds it, creates or reuses the corresponding
 
 ## Code boundaries
 
-All coding and review follow [AGENTS.md](AGENTS.md) (Chinese).
+All coding and review follow [AGENTS.md](AGENTS.md).
 
 - `SwiftSeed/SwiftSeedApp.swift`: the app composition entry point, supplying presentation inputs.
 - `SwiftSeed/Rendering/`: a separate rendering module containing only views and immutable presentation data. The app depends on this module; the module does not depend on the app implementation.

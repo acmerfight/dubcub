@@ -43,7 +43,7 @@ public struct ContentView: View {
     ContentView(state: .initial)
 }
 
-#Preview("窄窗口与最大字号", traits: .fixedLayout(width: 320, height: 320)) {
+#Preview("Narrow window and largest text", traits: .fixedLayout(width: 320, height: 320)) {
     ContentView(state: .initial)
         .dynamicTypeSize(.accessibility5)
 }

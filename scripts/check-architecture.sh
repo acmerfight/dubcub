@@ -7,7 +7,7 @@ source scripts/xcode-env.sh
 swift_compiler=$(xcrun --find swiftc)
 host_libraries="$(dirname "$swift_compiler")/../lib/swift/host"
 if [ ! -d "$host_libraries/SwiftParser.swiftmodule" ]; then
-    printf 'error: 当前 Xcode 缺少架构检查所需的 SwiftParser。\n' >&2
+    printf 'error: The selected Xcode lacks SwiftParser required for architecture checks.\n' >&2
     exit 1
 fi
 # Build phases inherit the iOS SDK/architecture. The checker runs on the Mac.

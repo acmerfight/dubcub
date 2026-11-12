@@ -1,31 +1,31 @@
-# 使用模板
+# Using the template
 
-SwiftSeed 是支持 iPhone / iPad 的原生工程模板，保留静态欢迎页作为可删除的示例。严格分离状态与渲染是本模板的设计选择，不代表所有 iOS 项目都必须采用相同架构。
+SwiftSeed is a native iPhone / iPad project template with a static welcome screen that can be removed. Strict separation of state and rendering is this template's design choice, not a requirement for every iOS project.
 
-## 创建项目
+## Create a project
 
-1. 在 GitHub 选择 **Use this template → Create a new repository**，只复制默认分支，再克隆自己的新仓库。GitHub 复制文件，不应假定分支保护、安全设置或历史 CI 结果也会继承。
-2. 安装完整 Xcode 26.3（当前本地基线）、iOS SDK 和兼容的模拟器运行时，满足完整开发环境检查。执行 `python3 scripts/tools.py install`，安装锁定版本、校验 SHA-256 的开发工具。
-3. 在干净工作区执行 `python3 scripts/initialize-template.py --name MyApp --bundle-id com.example.myapp`。它更新工程名、源码路径、脚本、UI 测试和 Bundle ID，并重新生成工程；不会修改 Git 远程地址、提交历史或签名团队。检查差异，更新 README 的仓库链接、产品介绍和示例文案。
-4. 执行 `bash scripts/doctor.sh`、`bash scripts/check.sh` 和 `bash scripts/verify-builds.sh`。最后一项编译 Debug App / UI 测试和 Release 真机 SDK，不启动模拟器，也不签名。
-5. 将初始化结果通过分支与 PR 提交到新仓库，再运行 `python3 scripts/configure-repository.py OWNER/REPO` 应用保护设置。此命令需要 `gh` 登录及目标仓库管理员权限，可重复执行；会启用 PR 门禁、squash、自动合并能力、漏洞提醒、密钥推送保护、Action SHA 固定和只读工作流默认权限。自动合并仍需逐 PR 启用。
-6. 确认目标仓库 Actions 已启用，首次所有必需检查成功，定时 UI 工作流处于 active 状态。公开仓库可使用标准免费 runner；私有仓库的功能与额度取决于套餐，脚本会明确报告不支持的配置，不会默默跳过保护。
+1. Choose **Use this template → Create a new repository** on GitHub, copy only the default branch, and clone your new repository. GitHub copies files; do not assume branch protections, security settings, or historical CI results are inherited.
+2. Install full Xcode 26.3 (the current local baseline), the iOS SDK, and a compatible simulator runtime to satisfy the development environment checks. Run `python3 scripts/tools.py install` to install pinned development tools with SHA-256 verification.
+3. From a clean working tree, run `python3 scripts/initialize-template.py --name MyApp --bundle-id com.example.myapp`. It updates the project name, source paths, scripts, UI tests, and Bundle ID, then regenerates the project. It does not change Git remotes, commit history, or signing teams. Review the diff and update the README repository links, product description, and sample copy.
+4. Run `bash scripts/doctor.sh`, `bash scripts/check.sh`, and `bash scripts/verify-builds.sh`. The last command compiles the Debug app and UI tests and builds Release against the device SDK without booting a simulator or signing.
+5. Submit the initialized project to the new repository through a branch and PR, then run `python3 scripts/configure-repository.py OWNER/REPO` to apply protections. This repeatable command requires an authenticated `gh` session and administrator access to the target repository. It enables PR gates, squash merging, auto-merge capability, vulnerability alerts, secret push protection, action SHA pinning, and read-only workflow defaults. Auto-merge still requires explicit activation for each PR.
+6. Confirm that Actions is enabled, all required checks succeed on the first run, and the scheduled UI workflow is active. Public repositories can use standard free runners; private repository features and quotas depend on the plan. The script explicitly reports unsupported settings instead of silently skipping protections.
 
-`tools.lock.json` 是开发工具版本和发布包校验值的唯一来源。CI 与本地通过 `scripts/tools.py` 调用相同工具，不依赖 Homebrew 最新版本。升级需同时审查发布来源、版本和摘要，再验证生成工程及格式没有意外变化。
+`tools.lock.json` is the single source of truth for development tool versions and artifact hashes. CI and local development invoke the same tools through `scripts/tools.py`, without relying on the latest Homebrew versions. Review release sources, versions, and hashes together when upgrading, then verify that generated project files and formatting have not changed unexpectedly.
 
-初始化后执行 `rg 'acmerfight|SwiftSeed|swiftseed'` 检查剩余示例文案与来源链接，逐项决定保留或替换。不要批量删除历史出处，也不要把原模板的验证结果当成新项目已验证的证据。对外分发前需自行确定适当的许可证；公开仓库或 Template 标记不等于授予许可证。
+After initialization, run `rg 'acmerfight|SwiftSeed|swiftseed'` to inspect remaining sample text and source links, deciding individually what to retain or replace. Do not indiscriminately delete historical references or treat the template's verification results as evidence that the new project has been verified. Choose an appropriate license before distributing your project; a public repository or template flag does not grant a license.
 
-## 增加第一个业务切片
+## Add the first business slice
 
-先定义一个用户入口及可观察结果，再添加核心 BDD。新业务单元与集成测试优先使用 Swift Testing，界面自动化使用 XCTest。纯业务规则和状态变化放在不依赖界面及设备 API 的模块中，在 Mac 上快速验证并加入每次 PR；真实存储、设备能力等行为只补必要集成验证。不要为模板预建空 Store、服务容器、持久化模型或“永远通过”的占位测试。
+Define a user entry point and observable outcome, then add core BDD. Prefer Swift Testing for new business unit and integration tests, and XCTest for UI automation. Keep pure business rules and state transitions in modules independent of UI and device APIs, verify them quickly on the Mac, and include them in every PR. Add only necessary integration checks for real storage and device capabilities. Do not prebuild empty stores, service containers, persistence models, or always-passing placeholder tests.
 
-目前只有启动欢迎页及大字号横屏阅读两个核心 UI 场景，每 6 小时运行，并支持手动执行。它不证明业务正确，也不替代发布候选版本的验收。定时 UI 使用 Xcode 27.2，PR 同时编译本地基线及新 SDK；新 SDK runner 的预览状态及本机限制见 [工程审查记录](ENGINEERING.md)。新增测试目标需显式加入共享 scheme，新增快速测试需纳入 CI 汇总门禁。
+There are currently only two core UI scenarios: opening the welcome screen and reading it in landscape at the largest text size. They run every 6 hours and support manual execution. They do not prove business correctness or replace release-candidate acceptance. Scheduled UI tests use Xcode 27.2; PRs compile with both the local baseline and the newer SDK. See the [engineering review](ENGINEERING.md) for the newer runner's preview status and local hardware limitations. Explicitly add new test targets to the shared scheme and new fast tests to the CI aggregate gate.
 
-## 发布前仍需完成
+## Work required before release
 
-- 用真实设备验证签名、安装、Release 运行，以及功能涉及的音频、权限拒绝、中断恢复等核心路径。
-- 验证 iPad 分屏和可调整窗口、横竖屏、最大动态字号、VoiceOver 与深浅色；按真实问题补最少必要验证，不用大量快照测试替代体验检查。
-- 根据实际收集的数据、所用 API 与第三方 SDK，填写隐私清单、用途说明和 App Store 隐私信息；不要预填不存在的数据用途或申请暂未使用的权限。
-- 配置产品图标、版本、签名团队和分发流程；签名凭据留在受控环境中。当前 CI 的无签名 Release 编译不等于已验证归档、分发或上架。
+- Verify signing, installation, Release execution, and relevant core paths such as audio, denied permissions, and interruption recovery on physical devices.
+- Verify iPad split view and resizable windows, portrait and landscape, maximum Dynamic Type, VoiceOver, and light and dark appearances. Add only the verification needed for real issues; large snapshot suites do not replace experience checks.
+- Complete privacy manifests, purpose strings, and App Store privacy information based on the data actually collected, APIs used, and third-party SDKs included. Do not invent data uses or request unused permissions.
+- Configure product icons, versions, signing teams, and distribution. Keep signing credentials in controlled environments. The current unsigned Release CI build does not verify archiving, distribution, or App Store submission.
 
-这些是随产品完成的工作，不通过加入空文件或不真实的声明来宣称模板已经“生产就绪”。
+Complete these tasks as the product develops. Empty files and inaccurate declarations do not make the template production-ready.
