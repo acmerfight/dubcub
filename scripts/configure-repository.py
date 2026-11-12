@@ -20,18 +20,18 @@ def api(path, method="GET", body=None):
 
 def main():
     if len(sys.argv) != 2 or not re.fullmatch(r"[\w.-]+/[\w.-]+", sys.argv[1]):
-        sys.exit("用法：python3 scripts/configure-repository.py OWNER/REPO")
+        sys.exit("Usage: python3 scripts/configure-repository.py OWNER/REPO")
     repository = sys.argv[1]
     path = "repos/" + repository
     info = api(path)
     if not info["permissions"]["admin"]:
-        sys.exit("需要目标仓库的管理员权限。")
+        sys.exit("Administrator access to the target repository is required.")
     rules = json.loads((ROOT / ".github/main-ruleset.json").read_text())
     rules["conditions"]["ref_name"]["include"] = ["refs/heads/" + info["default_branch"]]
     rules["name"] = "main requires PR and passing CI"
     existing = [item for item in api(path + "/rulesets") if item["name"] == rules["name"]]
     if len(existing) > 1:
-        sys.exit("存在重名规则，需先在 GitHub 上确认，不能猜测覆盖。")
+        sys.exit("Duplicate ruleset names found; review them on GitHub before replacing any ruleset.")
     api(path, "PATCH", {
         "allow_squash_merge": True, "allow_merge_commit": False,
         "allow_rebase_merge": False, "delete_branch_on_merge": True,
@@ -51,8 +51,8 @@ def main():
         "secret_scanning": {"status": "enabled"},
         "secret_scanning_push_protection": {"status": "enabled"},
     }})
-    print("已应用规则：" + result["_links"]["html"]["href"])
-    print("请检查 Actions 权限及首次 CI。平台或套餐不支持的设置会明确失败；已成功设置的部分不会回滚。")
+    print("Applied ruleset: " + result["_links"]["html"]["href"])
+    print("Review Actions permissions and the first CI run. Unsupported platform or plan settings fail explicitly; applied settings are not rolled back.")
 
 
 if __name__ == "__main__":

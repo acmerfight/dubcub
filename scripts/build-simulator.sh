@@ -3,7 +3,7 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 source scripts/xcode-env.sh
 if ! xcrun --sdk iphonesimulator --show-sdk-path >/dev/null 2>&1; then
-    printf '请先安装完整 Xcode 和 iOS 平台组件，再运行此脚本。\n' >&2
+    printf 'Install full Xcode and iOS platform components before running this script.\n' >&2
     exit 1
 fi
 python3 scripts/tools.py run xcodegen generate

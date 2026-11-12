@@ -9,7 +9,7 @@ fi
 expected_xcode=${EXPECTED_XCODE_VERSION:-$(cat "$(dirname "${BASH_SOURCE[0]}")/../.xcode-version")}
 actual_xcode=$(xcodebuild -version) || return 1
 if [ "$(printf '%s\n' "$actual_xcode" | head -n 1)" != "Xcode $expected_xcode" ]; then
-    printf 'error: 需要 Xcode %s，实际为 %s。请显式选择匹配的 DEVELOPER_DIR。\n' \
+    printf 'error: Expected Xcode %s, found %s. Explicitly select a matching DEVELOPER_DIR.\n' \
         "$expected_xcode" "$actual_xcode" >&2
     return 1
 fi

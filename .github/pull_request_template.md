@@ -1,11 +1,11 @@
-## 用户结果
+## User outcome
 
-<!-- 用户可以做什么、看到什么；工程配置变更说明实际效果。 -->
+<!-- What can users do and observe? For engineering changes, describe the practical effect. -->
 
-## 验证
+## Verification
 
-<!-- 核心 Given / When / Then、实际执行结果和未验证项。纯文档或机械修改不增加无意义测试。 -->
+<!-- Core Given / When / Then, actual results, and unverified areas. Do not add meaningless tests for documentation-only or mechanical changes. -->
 
-## 设计检查
+## Design review
 
-<!-- 是否新增必要状态、谁负责写入、规则和副作用边界是否清晰；不涉及可简述。 -->
+<!-- Is new state necessary? Who owns writes? Are rules and side-effect boundaries clear? State briefly if not applicable. -->

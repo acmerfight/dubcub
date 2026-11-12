@@ -5,7 +5,7 @@ source scripts/xcode-env.sh
 
 case "${1:-iphone}" in
     iphone|ipad) family="${1:-iphone}" ;;
-    *) printf '用法：bash scripts/test-simulator.sh [iphone|ipad]\n' >&2; exit 2 ;;
+    *) printf 'Usage: bash scripts/test-simulator.sh [iphone|ipad]\n' >&2; exit 2 ;;
 esac
 
 device_id=${TEST_SIMULATOR_ID:-$(bash scripts/prepare-test-simulator.sh "$family")}
@@ -40,6 +40,6 @@ xcrun xcresulttool get test-results summary --path "$result_path" | \
 import json, sys
 result = json.load(sys.stdin)
 if result["passedTests"] < 1 or result["failedTests"] or result["skippedTests"]:
-    sys.exit("测试必须实际执行且全部通过，不接受空跑或跳过。")
-print("通过测试数：", result["passedTests"])
+    sys.exit("Tests must execute and all pass; empty or skipped tests are not accepted.")
+print("Passed tests: ", result["passedTests"])
 '

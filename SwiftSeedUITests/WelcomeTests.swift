@@ -3,20 +3,22 @@ import XCTest
 @MainActor
 final class WelcomeTests: XCTestCase {
     func testGivenInstalledAppWhenOpenedThenWelcomeIsVisible() {
-        // Given: 用户已安装 App。
+        // Given: The user has installed the app.
         let app = XCUIApplication()
 
-        // When: 用户打开 App。
+        // When: The user opens the app.
         app.launch()
 
-        // Then: 用户看到应用名称、欢迎信息与当前功能说明。
+        // Then: The user sees the app name, welcome message, and feature description in English.
         XCTAssertTrue(app.staticTexts["SwiftSeed"].waitForExistence(timeout: 10))
-        XCTAssertTrue(app.staticTexts["从这里开始你的下一个 App"].exists)
-        XCTAssertTrue(app.staticTexts["这是支持 iPhone 和 iPad 的 Swift 应用模板。替换此页面，开始你的第一个功能。"].exists)
+        XCTAssertTrue(app.staticTexts["Your next app starts here"].exists)
+        XCTAssertTrue(app.staticTexts[
+            "A Swift app template for iPhone and iPad. Replace this screen to build your first feature."
+        ].exists)
     }
 
     func testGivenLargestTextWhenOpenedInLandscapeThenWelcomeRemainsReadable() throws {
-        // Given: 用户需要最大的辅助字号，并横屏使用设备。
+        // Given: The user needs the largest accessibility text size and uses landscape orientation.
         let app = XCUIApplication()
         app.launchArguments = [
             "-UIPreferredContentSizeCategoryName", "UICTContentSizeCategoryAccessibilityXXXL",
@@ -24,13 +26,15 @@ final class WelcomeTests: XCTestCase {
         XCUIDevice.shared.orientation = .landscapeLeft
         defer { XCUIDevice.shared.orientation = .portrait }
 
-        // When: 用户打开页面，并向下阅读。
+        // When: The user opens the screen and scrolls to read.
         app.launch()
         XCTAssertTrue(app.staticTexts["SwiftSeed"].waitForExistence(timeout: 10))
         try app.performAccessibilityAudit(for: [.textClipped, .dynamicType])
         app.swipeUp()
 
-        // Then: 文字不被裁切，功能说明仍能读到。
-        XCTAssertTrue(app.staticTexts["这是支持 iPhone 和 iPad 的 Swift 应用模板。替换此页面，开始你的第一个功能。"].isHittable)
+        // Then: Text is not clipped and the feature description remains readable.
+        XCTAssertTrue(app.staticTexts[
+            "A Swift app template for iPhone and iPad. Replace this screen to build your first feature."
+        ].isHittable)
     }
 }
