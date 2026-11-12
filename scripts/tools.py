@@ -31,7 +31,9 @@ def binary_path(name):
 
 def verify(name):
     binary = binary_path(name)
-    if not binary.is_file():
+    resources = artifact(name).get("resources", [])
+    destination = ROOT / ".build/tools" / name / TOOLS[name]["version"]
+    if not binary.is_file() or any(not (destination / resource).is_dir() for resource in resources):
         raise RuntimeError(f"Missing {name}; run ./dev setup {TOOLS[name]['group']} first.")
     output = subprocess.check_output([str(binary), TOOLS[name]["version_argument"]], text=True)
     if not re.search(r"\b" + re.escape(TOOLS[name]["version"]) + r"\b", output):
@@ -41,7 +43,7 @@ def verify(name):
 
 def install(name):
     release = artifact(name)
-    # Only extract the required standalone executable, never arbitrary archive paths or links.
+    # Extract only the executable and declared support resources from a verified artifact.
     with tempfile.TemporaryDirectory() as directory:
         archive = Path(directory) / "download"
         subprocess.run(
@@ -63,20 +65,35 @@ def install(name):
             raise RuntimeError("Download verification failed: " + name)
         if release["url"].endswith(".zip"):
             with zipfile.ZipFile(archive) as package:
-                content = package.read(release["binary"])
+                files = {release["binary"]: package.read(release["binary"])}
+                for prefix in release.get("resources", []):
+                    members = [
+                        item
+                        for item in package.infolist()
+                        if item.filename.startswith(prefix) and not item.is_dir()
+                    ]
+                    if not members:
+                        raise RuntimeError("Missing packaged resources: " + name)
+                    files.update({item.filename: package.read(item) for item in members})
         else:
             with tarfile.open(archive, "r:gz") as package:
                 member = package.getmember(release["binary"])
                 if not member.isfile():
                     raise RuntimeError("Expected a regular executable: " + name)
                 with package.extractfile(member) as executable:
-                    content = executable.read()
-        binary = binary_path(name)
-        binary.parent.mkdir(parents=True, exist_ok=True)
-        temporary = binary.with_suffix(".installing")
-        temporary.write_bytes(content)
-        temporary.chmod(0o755)
-        temporary.replace(binary)
+                    files = {release["binary"]: executable.read()}
+        destination = ROOT / ".build/tools" / name / TOOLS[name]["version"]
+        for relative, content in files.items():
+            path = Path(relative)
+            if path.is_absolute() or ".." in path.parts:
+                raise RuntimeError("Artifact path escapes the destination: " + name)
+            target = destination / path
+            target.parent.mkdir(parents=True, exist_ok=True)
+            temporary = target.with_suffix(target.suffix + ".installing")
+            temporary.write_bytes(content)
+            if relative == release["binary"]:
+                temporary.chmod(0o755)
+            temporary.replace(target)
         verify(name)
         print(f"{name} {TOOLS[name]['version']} verified and installed.")
 

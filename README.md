@@ -42,7 +42,7 @@ Scripts prefer `/Applications/Xcode.app` when `DEVELOPER_DIR` is unset and valid
 
 `project.yml` is the configuration source of truth. Generated project files are committed for direct opening in Xcode. After configuration changes, run `./dev generate` and stage the generated files before `./dev check`. The project check generates a clean copy in a temporary directory and compares content and tracked file sets. Missing, modified, obsolete, and newly generated but untracked files fail; checking does not overwrite your working project.
 
-`tools.lock.json` owns versions, official release URLs, and platform-specific SHA-256 hashes for SwiftLint, SwiftFormat, XcodeGen, actionlint, ShellCheck, Ruff, and Gitleaks. One installer verifies archives and extracts only the named standalone executable into ignored `.build/tools/`. Builds never download missing tools. Tool upgrades require reviewing the release source, version, hashes, and resulting checks. Dependabot updates Actions weekly; downloaded CLI tools require reviewed lock-file updates.
+`tools.lock.json` owns versions, official release URLs, and platform-specific SHA-256 hashes for SwiftLint, SwiftFormat, XcodeGen, actionlint, ShellCheck, Ruff, and Gitleaks. One installer verifies archives and extracts only the named executable and declared support resources into ignored `.build/tools/`. Builds never download missing tools. Tool upgrades require reviewing the release source, version, hashes, and resulting checks. Dependabot updates Actions weekly; downloaded CLI tools require reviewed lock-file updates.
 
 ## Strict checks
 
