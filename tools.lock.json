@@ -163,5 +163,16 @@
         "binary": "gitleaks"
       }
     }
+  },
+  "pre-commit": {
+    "version": "4.7.0",
+    "version_argument": "--version",
+    "group": "hooks",
+    "binary": "bin/pre-commit",
+    "python_minimum": [
+      3,
+      11
+    ],
+    "requirements": "scripts/requirements-hooks.txt"
   }
 }

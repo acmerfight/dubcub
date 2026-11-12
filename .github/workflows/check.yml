@@ -74,7 +74,7 @@ jobs:
           persist-credentials: false
       - name: Install development tools
         run: |
-          ./dev setup apple
+          ./dev setup
       - name: Check code, architecture and formatting
         run: ./dev check apple
 

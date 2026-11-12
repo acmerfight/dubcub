@@ -16,6 +16,14 @@ case "$operation" in
         xcrun swift --version
         xcrun --sdk iphoneos --show-sdk-version
         python3 scripts/tools.py check apple
+        python3 scripts/tools.py check hooks
+        ./dev hooks validate-config
+        hook_path=$(git rev-parse --git-path hooks/pre-commit)
+        if [ ! -x "$hook_path" ] || [ -n "$(git config --get core.hooksPath || true)" ]; then
+            printf 'Commit hook is missing or overridden; run ./dev setup hooks.\n' >&2
+            exit 1
+        fi
+        printf 'Commit hook is installed.\n'
         python3 scripts/simulator.py iphone --check
         python3 scripts/simulator.py ipad --check
         ;;

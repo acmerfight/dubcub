@@ -6,7 +6,7 @@ Repository: [acmerfight/swiftseed](https://github.com/acmerfight/swiftseed). Cho
 
 ## Start developing
 
-Install Xcode 26.3 (the local baseline in `.xcode-version`), iOS platform components, and a compatible simulator runtime. The project uses Swift 6 and targets iOS / iPadOS 17 or later.
+Install Xcode 26.3 (the local baseline in `.xcode-version`), iOS platform components, a compatible simulator runtime, and Python 3.11 or newer for pre-commit. The project uses Swift 6 and targets iOS / iPadOS 17 or later.
 
 ```sh
 ./dev setup
@@ -22,8 +22,10 @@ Use `./dev help` for all commands. The same entry point is used locally, by Xcod
 
 | Command | Result |
 | --- | --- |
-| `./dev setup` | Install all pinned tools after SHA-256 verification |
-| `./dev doctor` | Verify Xcode, Apple tools, SDK, and compatible iPhone / iPad runtimes |
+| `./dev setup` | Install all pinned tools with hash verification and install the commit hook |
+| `./dev hooks run` | Check staged content without committing |
+| `./dev hooks install` | Reinstall the hook after moving the checkout or repairing setup |
+| `./dev doctor` | Verify Xcode, tools, hook installation, SDK, and compatible iPhone / iPad runtimes |
 | `./dev check` | Check workflows, Shell, Python, Swift, architecture, generated project, core template acceptance, and Git secrets |
 | `./dev format` | Apply Python lint fixes and Python / Swift formatting |
 | `./dev generate` | Regenerate the Xcode project from `project.yml` |
@@ -34,7 +36,7 @@ Use `./dev help` for all commands. The same entry point is used locally, by Xcod
 | `./dev configure OWNER/REPO` | Apply repository protections with administrator access |
 | `./dev ui-health OWNER/REPO` | Check enabled, successful, recent default-branch UI verification using an authenticated `gh` session |
 
-CI uses focused subsets: `setup apple`, `setup portable`, `setup security`, and `check apple`, `check portable`, `check secrets`. Linux runs portable and security checks; Apple checks require macOS. `check swift` is the Xcode build-phase subset, and `check project` verifies generated outputs only. These are shared implementations, not separate CI rules.
+CI uses focused subsets: `setup apple`, `setup portable`, `setup security`, and `check apple`, `check portable`, `check secrets`. Linux runs portable and security checks. The macOS lint job installs all tools because its acceptance scenarios exercise real commits; other Apple jobs install only Apple tools. `check swift` is the Xcode build-phase subset, and `check project` verifies generated outputs only. These are shared implementations, not separate CI rules.
 
 Scripts prefer `/Applications/Xcode.app` when `DEVELOPER_DIR` is unset and validate its version without changing the global selection. For a validated newer installation, set `DEVELOPER_DIR` and `EXPECTED_XCODE_VERSION` explicitly.
 
@@ -42,7 +44,7 @@ Scripts prefer `/Applications/Xcode.app` when `DEVELOPER_DIR` is unset and valid
 
 `project.yml` is the configuration source of truth. Generated project files are committed for direct opening in Xcode. After configuration changes, run `./dev generate` and stage the generated files before `./dev check`. The project check generates a clean copy in a temporary directory and compares content and tracked file sets. Missing, modified, obsolete, and newly generated but untracked files fail; checking does not overwrite your working project.
 
-`tools.lock.json` owns versions, official release URLs, and platform-specific SHA-256 hashes for SwiftLint, SwiftFormat, XcodeGen, actionlint, ShellCheck, Ruff, and Gitleaks. One installer verifies archives and extracts only the named executable and declared support resources into ignored `.build/tools/`. Builds never download missing tools. Tool upgrades require reviewing the release source, version, hashes, and resulting checks. Dependabot updates Actions weekly; downloaded CLI tools require reviewed lock-file updates.
+`tools.lock.json` owns versions, official release URLs, and platform-specific SHA-256 hashes for SwiftLint, SwiftFormat, XcodeGen, actionlint, ShellCheck, Ruff, and Gitleaks. One installer verifies archives and extracts only the named executable and declared support resources into ignored `.build/tools/`. The same installer installs pre-commit into a project-local Python environment; `scripts/requirements-hooks.txt` pins its complete dependency set with hashes and permits only binary distributions. Builds and commits never download missing tools. Tool upgrades require reviewing the release source, version, hashes, and resulting checks. Dependabot updates Actions weekly; downloaded CLI tools and the Python dependency lock require reviewed updates together with `tools.lock.json`.
 
 ## Strict checks
 
@@ -52,6 +54,16 @@ Scripts prefer `/Applications/Xcode.app` when `DEVELOPER_DIR` is unset and valid
 - actionlint validates every workflow, including scheduled jobs. Its explicitly selected ShellCheck also inspects embedded shell. ShellCheck separately scans repository shell files, and Ruff checks Python correctness, imports, and formatting. New script files are discovered automatically. Missing tools and failures are not skipped.
 - Core template acceptance verifies that initializing a new app preserves binary artwork and generates the new identity, and that omitted generated files block delivery. Health acceptance verifies recent success and rejection of disabled, missing, failed, or stale UI verification. These are developer-visible promises, not internal coverage targets.
 - Required security checks scan the full Git history with redacted Gitleaks output, audit workflow security with zizmor, and reject newly introduced known vulnerable dependencies of low severity or higher. Dependency review covers recognized manifests and Actions, not every manually downloaded binary. These checks do not replace application security review.
+
+## Local commit checks
+
+`./dev setup` installs the real Git pre-commit hook for this checkout. Existing users can run `./dev setup hooks` after installing the other tool groups. Each clone needs installation; Git does not copy active hooks. The installer preserves existing hooks using pre-commit's migration mode and refuses a conflicting `core.hooksPath` instead of silently overriding it. `./dev doctor` checks that the hook is executable and not redirected.
+
+`.pre-commit-config.yaml` selects changed staged Swift, Python, Shell, and workflow files. It runs the same pinned tools and configuration as CI, including rendering boundaries for changed rendering files. Gitleaks checks the staged diff with redacted output. Hooks only check: they do not fix files, stage changes, build the app, or start simulators. Run `./dev format`, review the result, and stage the intended changes explicitly when a format check fails.
+
+pre-commit temporarily hides unstaged changes while checking staged contents and restores them afterward. Core acceptance verifies partial staging, rejected commits preserving both index and working changes, redacted secret rejection, and renamed-template rendering checks. New hook configuration must itself be staged before committing. Missing tools fail with setup instructions; hook failures never silently install dependencies.
+
+Use `./dev hooks run` for staged checks and `./dev hooks run --all-files` to inspect tracked files (its secret hook still scans the staged diff; `./dev check secrets` scans Git history). Policy-only changes and broader cross-file consistency are checked by full CI. Local hooks are a feedback aid and can be bypassed by Git; protected-branch CI remains authoritative. There is no duplicate pre-push build. UI verification remains every 6 hours.
 
 ## PRs and CI
 

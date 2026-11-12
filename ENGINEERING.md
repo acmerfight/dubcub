@@ -80,3 +80,12 @@ Deliberate omissions:
 - Additional feature-specific UIKit, localization, and accessibility rules: evaluate false positives against real usage before enabling them. Syntax rules do not replace accessibility audits or device acceptance.
 
 Verification used the pinned tools and actual configuration: all five newly selected diagnostics were absent before the change, then rejected their violating examples while accepting corrected examples. All eight delegated format categories were rejected by SwiftFormat and passed after formatting. These are configuration acceptance probes, not a duplicate permanent suite for upstream rule implementations. Application behavior, required PR checks, and the six-hour UI schedule are unchanged.
+
+
+## Local commit feedback · 2026-11-13
+
+Use the pre-commit framework to handle partial staging and hook installation, with local entries calling the shared `./dev` checks. Fast read-only checks run on staged files; Gitleaks scans the staged diff with redaction. CI retains whole-repository checks, real hook acceptance, dual-toolchain builds, and the unchanged six-hour UI schedule. The hook is installed by setup for each clone; it is not a replacement for branch protection. [Staged-content behavior](https://pre-commit.com/#pre-commit), [Git hook limitations](https://git-scm.com/docs/githooks#_pre_commit).
+
+pre-commit 4.7 requires Python 3.11+. The installer uses an available supported Python and creates an isolated environment under `.build/tools/`, leaving system Python unchanged. `tools.lock.json` owns the framework version; `scripts/requirements-hooks.txt` records its resolved dependencies and artifact hashes. Installation requires hash checking and wheels, without unpinned dependency resolution or source builds. [Upstream Python requirement](https://github.com/pre-commit/pre-commit/blob/v4.7.0/setup.cfg), [pip hash checking](https://pip.pypa.io/en/stable/topics/secure-installs/).
+
+To update the dependency lock, resolve the version declared in `tools.lock.json` for Python 3.11+ across supported platforms, generate hashes (for example with `uv pip compile --universal --python-version 3.11 --generate-hashes`), and review the full dependency diff. Reinstall using `./dev setup hooks` and verify actual commits on macOS CI. The resolver is a maintainer tool, not a runtime dependency. Keep the minimum version in the hook configuration aligned with the lock.

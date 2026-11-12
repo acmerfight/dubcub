@@ -6,6 +6,7 @@ import json
 import os
 import platform
 import re
+import shutil
 import subprocess
 import sys
 import tarfile
@@ -19,6 +20,8 @@ PLATFORM = f"{sys.platform}-{'arm64' if platform.machine() in ('arm64', 'aarch64
 
 
 def artifact(name):
+    if "requirements" in TOOLS[name]:
+        return TOOLS[name]
     try:
         return TOOLS[name]["artifacts"][PLATFORM]
     except KeyError as error:
@@ -43,6 +46,41 @@ def verify(name):
 
 def install(name):
     release = artifact(name)
+    if "requirements" in release:
+        minimum = tuple(release["python_minimum"])
+        candidates = [sys.executable] + [shutil.which(f"python3.{minor}") for minor in range(14, 10, -1)]
+        for candidate in filter(None, candidates):
+            version = json.loads(
+                subprocess.check_output(
+                    [candidate, "-c", "import json,sys; print(json.dumps(list(sys.version_info[:2])))"],
+                    text=True,
+                )
+            )
+            if tuple(version) >= minimum:
+                break
+        else:
+            raise RuntimeError(
+                "pre-commit requires Python 3.11 or newer; install it before ./dev setup hooks."
+            )
+        destination = binary_path(name).parent.parent
+        subprocess.run([candidate, "-m", "venv", str(destination)], check=True)
+        subprocess.run(
+            [
+                str(destination / "bin/python"),
+                "-m",
+                "pip",
+                "install",
+                "--disable-pip-version-check",
+                "--require-hashes",
+                "--only-binary=:all:",
+                "-r",
+                str(ROOT / release["requirements"]),
+            ],
+            check=True,
+        )
+        verify(name)
+        print(f"{name} {release['version']} verified and installed in an isolated environment.")
+        return
     # Extract only the executable and declared support resources from a verified artifact.
     with tempfile.TemporaryDirectory() as directory:
         archive = Path(directory) / "download"
@@ -106,7 +144,7 @@ def main():
         return
     if args and args[0] in ("install", "check") and len(args) <= 2:
         group = args[1] if len(args) == 2 else "all"
-        if group not in ("all", "apple", "portable", "security"):
+        if group not in ("all", "apple", "portable", "security", "hooks"):
             raise RuntimeError("Unknown tool group: " + group)
         names = [name for name, tool in TOOLS.items() if group == "all" or tool["group"] == group]
         for name in names:
@@ -118,7 +156,7 @@ def main():
                 verify(name)
                 print(f"{name} {TOOLS[name]['version']} OK")
         return
-    raise RuntimeError("Usage: tools.py install|check [all|apple|portable|security] | run TOOL [ARGS]")
+    raise RuntimeError("Usage: tools.py install|check [all|apple|portable|security|hooks] | run TOOL [ARGS]")
 
 
 if __name__ == "__main__":

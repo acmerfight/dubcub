@@ -1,0 +1,60 @@
+# Local hooks reuse the verified tools and rules used by ./dev and CI.
+minimum_pre_commit_version: '4.7.0'
+default_install_hook_types: [pre-commit]
+default_stages: [pre-commit]
+exclude: '^(\.build|build|DerivedData)/'
+repos:
+  - repo: local
+    hooks:
+      - id: swiftlint
+        name: Swift lint
+        entry: ./dev hook swiftlint
+        language: system
+        types: [swift]
+        require_serial: true
+      - id: swiftformat
+        name: Swift format (check only)
+        entry: ./dev hook swiftformat
+        language: system
+        types: [swift]
+        require_serial: true
+      - id: rendering
+        name: Rendering boundaries
+        entry: ./dev hook rendering
+        language: system
+        files: '^SwiftSeed/Rendering/.*\.swift$'
+        types: [file]
+        require_serial: true
+      - id: ruff
+        name: Python lint
+        entry: ./dev hook ruff
+        language: system
+        types: [python]
+      - id: ruff-format
+        name: Python format (check only)
+        entry: ./dev hook ruff-format
+        language: system
+        types: [python]
+      - id: shellcheck
+        name: Shell lint
+        entry: ./dev hook shell
+        language: system
+        types: [shell]
+      - id: actionlint
+        name: Workflow lint
+        entry: ./dev hook workflows
+        language: system
+        files: '^\.github/workflows/.*\.ya?ml$'
+        types: [file]
+        require_serial: true
+      - id: pre-commit-config
+        name: Hook configuration
+        entry: ./dev hooks validate-config
+        language: system
+        files: '^\.pre-commit-config\.yaml$'
+      - id: gitleaks
+        name: Staged secrets (redacted)
+        entry: ./dev hook secrets
+        language: system
+        pass_filenames: false
+        always_run: true
