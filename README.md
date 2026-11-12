@@ -75,6 +75,12 @@ The app composition target defaults to main-actor isolation. The rendering modul
 
 The installer verifies SHA-256 hashes of official release artifacts and stores tools in the ignored `.build/tools/` directory. To upgrade, update `tools.lock.json`, reinstall, and verify checks and builds.
 
+### Workflow lint
+
+Every PR runs [actionlint](https://github.com/rhysd/actionlint) for all Actions workflows, including scheduled workflows. It validates workflow syntax, expressions, job dependencies, and runner labels, and uses a pinned ShellCheck to inspect embedded shell scripts. [zizmor](https://github.com/zizmorcore/zizmor) separately audits workflow security. Both checks run in the required Linux `Security` job; failures block `CI required` and merging.
+
+Run the same workflow lint locally with `bash scripts/check-workflows.sh`. The script pins official actionlint and ShellCheck releases with platform-specific SHA-256 hashes, verifies downloads before execution, and fails on unsupported platforms or download errors. Version and hash changes require review. `.github/actionlint.yaml` explicitly recognizes the hosted preview runner label; it does not suppress other diagnostics. This check does not recursively lint shell files called by workflows.
+
 ### Security checks
 
 The required `Security` check runs in parallel on Linux for every PR and is included in the final aggregate gate. Gitleaks scans the full Git history for secrets with redacted output. zizmor audits workflow permissions, injection, and supply-chain risks, failing on findings. Dependency Review blocks newly introduced dependencies with known vulnerabilities of low severity or higher; findings are not merely advisory.
