@@ -44,6 +44,8 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
+      - name: Lint all workflows and embedded shell scripts
+        run: bash scripts/check-workflows.sh
       - name: Scan Git history for secrets (redacted output)
         run: bash scripts/check-secrets.sh
       - name: Audit workflow security
