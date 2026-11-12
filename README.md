@@ -6,7 +6,7 @@ Repository: [acmerfight/swiftseed](https://github.com/acmerfight/swiftseed). Cho
 
 ## Start developing
 
-Install Xcode 26.3 (the local baseline in `.xcode-version`), iOS platform components, a compatible simulator runtime, and Python 3.11 or newer for pre-commit. The project uses Swift 6 and targets iOS / iPadOS 17 or later.
+Install Xcode 26.3 (the local baseline in `.xcode-version`), iOS platform components, a compatible simulator runtime, and Python 3.13 (pinned in `.python-version`) for pre-commit. The project uses Swift 6 and targets iOS / iPadOS 17 or later.
 
 ```sh
 ./dev setup

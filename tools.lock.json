@@ -169,10 +169,7 @@
     "version_argument": "--version",
     "group": "hooks",
     "binary": "bin/pre-commit",
-    "python_minimum": [
-      3,
-      11
-    ],
-    "requirements": "scripts/requirements-hooks.txt"
+    "requirements": "scripts/requirements-hooks.txt",
+    "python_version_file": ".python-version"
   }
 }

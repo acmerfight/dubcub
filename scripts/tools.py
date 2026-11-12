@@ -47,21 +47,18 @@ def verify(name):
 def install(name):
     release = artifact(name)
     if "requirements" in release:
-        minimum = tuple(release["python_minimum"])
-        candidates = [sys.executable] + [shutil.which(f"python3.{minor}") for minor in range(14, 10, -1)]
-        for candidate in filter(None, candidates):
-            version = json.loads(
-                subprocess.check_output(
-                    [candidate, "-c", "import json,sys; print(json.dumps(list(sys.version_info[:2])))"],
-                    text=True,
-                )
-            )
-            if tuple(version) >= minimum:
-                break
-        else:
-            raise RuntimeError(
-                "pre-commit requires Python 3.11 or newer; install it before ./dev setup hooks."
-            )
+        expected = (ROOT / release["python_version_file"]).read_text().strip()
+        current = f"{sys.version_info.major}.{sys.version_info.minor}"
+        candidate = sys.executable if current == expected else shutil.which("python" + expected)
+        if not candidate:
+            raise RuntimeError(f"Install Python {expected} from .python-version before ./dev setup hooks.")
+        actual = subprocess.check_output(
+            [candidate, "-c", "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"],
+            text=True,
+        ).strip()
+        if actual != expected:
+            raise RuntimeError(f"Expected Python {expected}, found {actual}.")
+        print(f"Installing hook tools with Python {actual}: {candidate}", flush=True)
         destination = binary_path(name).parent.parent
         subprocess.run([candidate, "-m", "venv", str(destination)], check=True)
         subprocess.run(
