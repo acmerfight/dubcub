@@ -1,8 +1,14 @@
 # SwiftSeed
 
-A reusable SwiftUI project template for iPhone and iPad, with strict state/rendering boundaries, core BDD, and verified CI.
+SwiftSeed provides a reusable engineering foundation for building multiple native iPhone and iPad apps, reducing repeated setup across projects.
 
-Repository: [acmerfight/swiftseed](https://github.com/acmerfight/swiftseed). Choose **Use this template** to create an independent app repository, then follow [TEMPLATE.md](TEMPLATE.md). The starter contains only a generic welcome screen. Coding requirements are in [AGENTS.md](AGENTS.md); decisions, sources, historical measurements, and verification limits are in [ENGINEERING.md](ENGINEERING.md).
+Developers and AI coding agents share clear architecture rules, strict state/rendering separation, core behavior-driven tests (BDD), and automated checks from local commits through protected pull requests.
+
+Choose **Use this template** on [GitHub](https://github.com/acmerfight/swiftseed) to create an independent app repository. Follow [TEMPLATE.md](TEMPLATE.md) to initialize it and configure repository protections, then replace the welcome screen and build your first feature.
+
+The starter provides a generic welcome screen and verified development workflows. Each app still needs its own business features, physical-device validation, privacy information, signing, and release preparation.
+
+See [AGENTS.md](AGENTS.md) for coding requirements and [ENGINEERING.md](ENGINEERING.md) for design decisions, sources, and verification limits.
 
 ## Start developing
 
